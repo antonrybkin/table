@@ -21,24 +21,36 @@
                     <th>Название ресурсов</th>
                 </tr>
             </thead>
-            <tbody v-if="filterTasks.length">
+            <tbody name="fade" is="transition-group">
                 <template v-for="task in filterTasks">
                     <TaskRow :key="task.id"
                              :task="task"
                              class="tasks-table__lavel1"
+                             :class="{ 'isOpen' : expanded[task.id] }"
                              @expand="expand" />
                     <template v-if="task.id in expanded && expanded[task.id]">
                         <template v-for="taskLavel2 in task.children">
                             <TaskRow :key="taskLavel2.id"
                                      :task="taskLavel2"
                                      class="tasks-table__lavel2"
+                                     :class="{ 'isOpen' : expanded[taskLavel2.id] }"
                                      @expand="expand" />
                             <template v-if="taskLavel2.id in expanded && expanded[taskLavel2.id]">
                                 <template v-for="taskLavel3 in taskLavel2.children">
                                     <TaskRow :key="taskLavel3.id"
                                              :task="taskLavel3"
-                                             class="tasks-table__lavel2"
+                                             class="tasks-table__lavel3"
+                                             :class="{ 'isOpen' : expanded[taskLavel3.id] }"
                                              @expand="expand" />
+                                    <template v-if="taskLavel3.id in expanded && expanded[taskLavel3.id]">
+                                        <template v-for="taskLavel4 in taskLavel3.children">
+                                            <TaskRow :key="taskLavel4.id"
+                                                     :task="taskLavel4"
+                                                     class="tasks-table__lavel4"
+                                                     :class="{ 'isOpen' : expanded[taskLavel4.id] }"
+                                                     @expand="expand" />
+                                        </template>
+                                    </template>
                                 </template>
                             </template>
                         </template>
@@ -96,10 +108,6 @@ export default {
 
         toActionArray() {
             const flat = deepLoop(this.filterTasks);
-            // const extKeys = Object.keys(this.expanded);
-            // const firstLevel = this.$store.getters.tasks.filter(task => task.children.length).map((task, i) => task.children[i]);
-            // const extChildren = this.$store.getters.tasks.filter(task => extKeys.indexOf(task.id.toString()) !== -1)
-            // console.log(firstLevel);
             return flat.filter(task => {
                 return task.checked === true
             })
@@ -143,10 +151,6 @@ export default {
             const bul =  this.expanded[id] ? 0 : 1;
             this.$set(this.expanded, id, bul);
         }
-    },
-    created(){
-        const firstLavel = this.$store.getters.tasks.map(task => task.id)
-        //this.expanded.push(...firstLavel);
     }
 }
 </script>
@@ -196,6 +200,9 @@ export default {
 
     &__id {
         background: #F0F0F0;
+        width: 22px;
+        min-width: 22px;
+
         div {
             text-align: left;
             color: #717A84;
@@ -216,11 +223,21 @@ export default {
     }
 
     &__lavel2 td:nth-child(3) {
+        padding-left: 50px;
+        text-align: left;
+    }
+
+    &__lavel3 td:nth-child(3) {
         padding-left: 60px;
         text-align: left;
     }
 
-    &__parent {
+    &__lavel4 td:nth-child(3) {
+        padding-left: 65px;
+        text-align: left;
+    }
+
+    &__arrow {
         position: absolute;
         display: block;
         border-color: transparent #AFB5BB;
@@ -229,7 +246,7 @@ export default {
         height: 0px;
         width: 0px;
         margin: 3px 0 0 -13px;
-        transition: all .4s;
+        transition: all .15s;
     }
 
     &__white td {
@@ -247,11 +264,14 @@ export default {
 
         &-input {
             width: 102px;
+            outline: none;
         }
     }
 
     &__date-picker {
-        cursor: pointer;
+        &_block {
+            cursor: pointer;
+        }
     }
 
     .tasks-table__select {
@@ -295,9 +315,25 @@ export default {
                 width: calc(100% + 2px);
                 height: 2px;
                 left: -2px;
-                top: 0;
+                top: -1px;
             }
         }
     }
+}
+
+
+.isOpen .tasks-table__arrow {
+    transform: rotate(90deg);
+    border-color: transparent #545C6A;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .15s
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
 }
 </style>

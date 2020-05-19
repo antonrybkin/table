@@ -4,7 +4,7 @@
                        :popover="{ visibility: 'click' }"
                        @input="upDate"
                        locale="ru">
-            <div>{{ date | moment("dd DD.MM.YY") }}</div>
+            <div class="tasks-table__date-picker_block">{{ date | moment("dd DD.MM.YY") }}</div>
         </v-date-picker>
     </td>
 </template>

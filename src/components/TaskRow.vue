@@ -3,7 +3,7 @@
         <th class="tasks-table__id"><div>{{ task.id }}</div></th>
         <td class="tasks-table__checkbox"><input type="checkbox" :checked="task.checked" @change="changeFlag" /></td>
         <td class="tasks-table__name" @click="$emit('expand', task.id)">
-                <i v-if="task.children && task.children.length" class="tasks-table__parent" />
+                <i v-if="task.children && task.children.length" class="tasks-table__arrow" />
                 {{ task.name }}
         </td>
         <td>{{ duration }} дней</td>
