@@ -1,28 +1,27 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <TasksTable/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import TasksTable from './components/TasksTable.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    TasksTable
   }
 }
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+@import "vue-select/src/scss/vue-select.scss";
+
+body {
+  font-family: Tahoma;
+  font-size: 11px;
+  line-height: 13px;
+  color: #222222;
 }
 </style>
