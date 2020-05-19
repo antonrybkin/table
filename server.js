@@ -1,12 +1,10 @@
 const express = require('express');
 const path = require('path');
-const basicAuth = require('express-basic-auth')
+const basicAuth = require('basic-auth-connect');
 
 const app = express();
 
-app.use(basicAuth({
-    users: { 'nota': 'media' }
-}))
+app.use(basicAuth('nota', 'media'));
 
 const staticFileMiddleware = express.static(path.join(__dirname + '/dist'));
 
