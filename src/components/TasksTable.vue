@@ -180,6 +180,7 @@ export default {
     }
 
     th, td {
+        box-sizing: border-box;
         border: 2px solid #D3D3D3;
         text-align: left;
         font-weight: bold;
@@ -200,7 +201,7 @@ export default {
 
     &__id {
         background: #F0F0F0;
-        width: 22px;
+        width: 42px;
         min-width: 22px;
 
         div {
