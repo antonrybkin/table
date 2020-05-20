@@ -2,7 +2,7 @@
     <div class="tasks-table">
         <div class="tasks-table__search">
             <label for="search">Поиск: </label>
-            <input name="search" type="text" id="search" v-model="search" class="tasks-table__search_input" />
+            <input name="search" type="text" id="search" v-model="search" class="tasks-table__search-input" />
         </div>
 
         <table>
@@ -21,7 +21,7 @@
                     <th>Название ресурсов</th>
                 </tr>
             </thead>
-            <tbody name="fade" is="transition-group">
+            <tbody v-show="!loading">
                 <template v-for="task in filterTasks">
                     <TaskRow :key="task.id"
                              :task="task"
@@ -67,6 +67,7 @@
 
 <script>
 import deepLoop from "@/helpers/deep-loop";
+import setCategoryDates from "@/helpers/set-category-dates";
 import TaskRow from '@/components/TaskRow';
 import TaskActions from '@/components/TaskActions';
 
@@ -77,7 +78,8 @@ export default {
         return {
             search: "",
             checkAll: false,
-            expanded: []
+            expanded: [],
+            loading: true
         }
     },
     computed: {
@@ -97,7 +99,9 @@ export default {
                     if (tasks[i].hasOwnProperty('children'))
                         sortTasks(tasks[i].children);
             };
+
             const tasks = this.$store.getters.tasks;
+            setCategoryDates(tasks);
             sortTasks(tasks);
             return tasks
         },
@@ -151,6 +155,15 @@ export default {
             const bul =  this.expanded[id] ? 0 : 1;
             this.$set(this.expanded, id, bul);
         }
+    },
+    created() {
+        deepLoop(this.filterTasks).forEach(task => this.expand(task.id))
+    },
+    mounted() {
+        setTimeout(() => {
+            this.expanded = []
+            this.loading = false
+        },0)
     }
 }
 </script>
@@ -160,7 +173,7 @@ export default {
     &__search {
         text-align: right;
         margin: 7px 0;
-        &_input {
+        &-input {
             width: 200px;
             padding: 0 6px;
             height: 28px;
@@ -295,7 +308,7 @@ export default {
             }
         }
 
-        .tasks-table__date-picker {
+        .tasks-table__date-picker, .tasks-table__select {
             border: 2px solid #F84932;
             position: relative;
 
@@ -313,7 +326,7 @@ export default {
                 content: "";
                 position: absolute;
                 background: #F84932;
-                width: calc(100% + 2px);
+                width: calc(100% + 4px);
                 height: 2px;
                 left: -2px;
                 top: -1px;

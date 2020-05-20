@@ -1,11 +1,13 @@
 <template>
     <td class="tasks-table__date-picker">
-        <v-date-picker :value="date"
+        <v-date-picker v-if="editable"
+                       :value="date"
                        :popover="{ visibility: 'click' }"
                        @input="upDate"
                        locale="ru">
             <div class="tasks-table__date-picker_block">{{ date | moment("dd DD.MM.YY") }}</div>
         </v-date-picker>
+        <div v-else>{{ date | moment("dd DD.MM.YY") }}</div>
     </td>
 </template>
 
@@ -13,7 +15,11 @@
 export default {
     name: "DatePicker",
     props: {
-        value: [ Date, String ]
+        value: [ Date, String, Number ],
+        editable: {
+            type: Boolean,
+            default: false
+        }
     },
     computed: {
         date() {

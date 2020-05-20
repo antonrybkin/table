@@ -1,6 +1,7 @@
 // https://vuex.vuejs.org/en/mutations.html
 
 import deepLoop from "@/helpers/deep-loop"
+import setCategoryDates from "@/helpers/set-category-dates";
 
 function findById(data, id) {
   function iter(a) {
@@ -22,14 +23,24 @@ export default {
 
   setStart(state, { id, value }) {
     findById(state.tasks, id).start = value
+    setCategoryDates(state.tasks)
   },
 
   setEnd(state, { id, value }) {
     findById(state.tasks, id).end = value
+    setCategoryDates(state.tasks)
   },
 
   setResourse(state, { id, value }) {
     findById(state.tasks, id).resource = value
+  },
+
+  setHours(state, { id, value }) {
+    //console.log(value);
+    if(value) {
+      console.log(value);
+      findById(state.tasks, id).hours = value
+    }
   },
 
   setFlag(state, { id, value }) {
@@ -44,7 +55,10 @@ export default {
     deepLoop(state.tasks).forEach(task => task.checked = true);
   },
 
-  removeTasks(state, { id, value }) {
-    //
+  removeTasks(state, items) {
+    items.forEach(item => {
+      findById(state.tasks, item.id).removed = true
+      console.log(findById(state.tasks, item.id));
+    })
   },
 };

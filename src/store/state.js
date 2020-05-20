@@ -6,8 +6,8 @@ export default {
       id: 1,
       checked: false,
       name: "Сбер-Сервис",
-      start: "2019-08-01T18:25:43.511Z",
-      end: "2021-07-26T18:25:43.511Z",
+      start: "2020-04-23T18:25:43.511Z",
+      end: "2020-04-30T18:25:43.511Z",
       order: 0,
       redMark: false,
       resource: null,
@@ -15,7 +15,7 @@ export default {
         {
           id: 2,
           checked: false,
-          editOrder: false,
+          hours: 0,
           name: "ПО",
           start: "2020-04-23T18:25:43.511Z",
           end: "2020-04-30T18:25:43.511Z",
@@ -26,10 +26,10 @@ export default {
             {
               id: 3,
               checked: false,
-              editOrder: false,
+              hours: 0,
               name: "Битрикс24",
-              start: "2020-04-23T18:25:43.511Z",
-              end: "2020-04-30T18:25:43.511Z",
+              start: "2019-08-01T18:25:43.511Z",
+              end: "2021-07-26T18:25:43.511Z",
               order: 2,
               redMark: true,
               resource: "Разработчик 1",
@@ -38,7 +38,7 @@ export default {
             {
               id: 4,
               checked: false,
-              editOrder: false,
+              hours: 0,
               name: "Расширение на 3000 пользователей",
               start: "2020-04-23T18:25:43.511Z",
               end: "2020-04-30T18:25:43.511Z",
@@ -52,7 +52,7 @@ export default {
         {
           id: 31,
           checked: false,
-          editOrder: false,
+          hours: 0,
           name: "Этап 1 (MVP)",
           start: "2020-04-23T18:25:43.511Z",
           end: "2020-04-30T18:25:43.511Z",
@@ -63,7 +63,7 @@ export default {
             {
               id: 32,
               checked: false,
-              editOrder: false,
+              hours: 0,
               name: "Таблица задач",
               start: "2020-04-23T18:25:43.511Z",
               end: "2020-04-30T18:25:43.511Z",
@@ -74,7 +74,7 @@ export default {
                 {
                   id: 33,
                   checked: false,
-                  editOrder: false,
+                  hours: 0,
                   name: "Вёрстка (MVP)",
                   start: "2020-04-23T18:25:43.511Z",
                   end: "2020-04-30T18:25:43.511Z",
@@ -86,7 +86,7 @@ export default {
                 {
                   id: 34,
                   checked: false,
-                  editOrder: false,
+                  hours: 0,
                   name: "Расширение на 5000 пользователей",
                   start: "2020-04-23T18:25:43.511Z",
                   end: "2020-04-30T18:25:43.511Z",
@@ -98,7 +98,7 @@ export default {
                 {
                   id: 35,
                   checked: false,
-                  editOrder: false,
+                  hours: 0,
                   name: "Битрикс24 (MVP)",
                   start: "2020-04-23T18:25:43.511Z",
                   end: "2020-04-30T18:25:43.511Z",
@@ -114,7 +114,7 @@ export default {
         {
           id: 53,
           checked: false,
-          editOrder: false,
+          hours: 0,
           name: "Этап 2",
           start: "2020-04-23T18:25:43.511Z",
           end: "2020-04-30T18:25:43.511Z",
@@ -125,7 +125,7 @@ export default {
             {
               id: 63,
               checked: false,
-              editOrder: false,
+              hours: 0,
               name: "Битрикс24 2",
               start: "2020-04-23T18:25:43.511Z",
               end: "2020-04-30T18:25:43.511Z",
@@ -139,7 +139,7 @@ export default {
         {
           id: 99,
           checked: false,
-          editOrder: false,
+          hours: 0,
           name: "Этап 3",
           start: "2020-04-23T18:25:43.511Z",
           end: "2020-04-30T18:25:43.511Z",
@@ -150,7 +150,7 @@ export default {
             {
               id: 100,
               checked: false,
-              editOrder: false,
+              hours: 0,
               name: "Таблица ресурсов",
               start: "2020-04-23T18:25:43.511Z",
               end: "2020-04-30T18:25:43.511Z",
@@ -162,7 +162,7 @@ export default {
             {
               id: 102,
               checked: false,
-              editOrder: false,
+              hours: 0,
               name: "Stopcovid",
               start: "2020-04-23T18:25:43.511Z",
               end: "2020-04-30T18:25:43.511Z",

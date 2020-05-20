@@ -6,9 +6,9 @@
                 <i v-if="task.children && task.children.length" class="tasks-table__arrow" />
                 {{ task.name }}
         </td>
-        <td>{{ duration }} дней</td>
-        <DatePickerCell :value="task.start" @update="updateStart" />
-        <DatePickerCell :value="task.end" @update="updateEnd" />
+        <td>{{ task.duration }} дней</td>
+        <DatePickerCell :value="task.start" :editable="!task.children.length" @update="updateStart" />
+        <DatePickerCell :value="task.end" :editable="!task.children.length" @update="updateEnd" />
         <td class="tasks-table__order">
                 <label v-show="!editOrder"
                        @click="changeOrder(task.id, task.order)"
@@ -22,7 +22,7 @@
                        @keyup.enter="saveOrder(task.id)"
                        class="tasks-table__order-input">
         </td>
-        <td>{{ hours }} ч</td>
+        <td>{{ task.hours }} ч</td>
         <td class="tasks-table__select">
             <v-select v-if="!task.children || task.children.length < 1"
                       @input="newResource => setResourse(task.id, newResource)"
@@ -59,12 +59,8 @@ export default {
     },
     computed: {
         duration() {
-            const oneDay = 24 * 60 * 60 * 1000; // часы * минуты * секунды * мс
+            const oneDay = 24 * 60 * 60 * 1000; // часы * минуты * секунды * мс = день
             return Math.round(Math.abs((this.task.start - this.task.end) / oneDay))
-        },
-
-        hours() {
-            return this.duration * 8
         },
     },
     methods: {
