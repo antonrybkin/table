@@ -56,9 +56,11 @@ export default {
   },
 
   removeTasks(state, items) {
+    const flat = deepLoop(state.tasks)
     items.forEach(item => {
-      findById(state.tasks, item.id).removed = true
-      console.log(findById(state.tasks, item.id));
+      const i = state.tasks.map(item => item.id).indexOf(item.id);
+      console.log(i);
+      state.tasks.splice(i, 1);
     })
   },
 };

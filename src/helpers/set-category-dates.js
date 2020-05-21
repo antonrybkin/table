@@ -1,5 +1,10 @@
 export default function setCategoryDates(tasks) {
     const oneDay = 24 * 60 * 60 * 1000; // часы * минуты * секунды * мс = день
+    function dateDiffInDays(a, b) {
+        const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+        const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+        return Math.floor((utc2 - utc1) / oneDay) + 1;
+    }
 
     function round(items) {
         items.forEach(task => {
@@ -14,7 +19,7 @@ export default function setCategoryDates(tasks) {
             } else if(task.children.length < 1) {
                 task.hours = task.duration * 8
             }
-            task.duration = Math.round(Math.abs((task.start - task.end) / oneDay));
+            task.duration = dateDiffInDays(new Date(task.start), new Date(task.end));
         })
     }
     round(tasks)

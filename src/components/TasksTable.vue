@@ -214,8 +214,8 @@ export default {
 
     &__id {
         background: #F0F0F0;
-        width: 42px;
-        min-width: 22px;
+        width: 45px;
+        min-width: 45px;
 
         div {
             text-align: left;
@@ -268,22 +268,33 @@ export default {
         font-weight: lighter;
     }
 
-    &__order {
+    .tasks-table__order {
+        padding: 0;
         width: 120px;
 
         &-label {
             display: block;
-            width: 120px;
+            padding: 10px;
+            width: 100px;
         }
 
         &-input {
-            width: 102px;
+            padding: 10px;
+            width: 96px;
+            height: 10px;
             outline: none;
         }
     }
 
-    &__date-picker {
+    .tasks-table__date-picker {
+        padding: 0;
+
+        > div {
+            padding: 10px;
+        }
+
         &_block {
+            padding: 10px;
             cursor: pointer;
         }
     }

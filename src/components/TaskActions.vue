@@ -49,6 +49,9 @@ export default {
         remove() {
             this.modal.show = true;
             this.modal.msg = "Серьёздно?"
+
+            // const items = this.items;
+            // this.$store.commit('removeTasks', items)
         }
     }
 }

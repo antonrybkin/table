@@ -7,8 +7,8 @@
                 {{ task.name }}
         </td>
         <td>{{ task.duration }} дней</td>
-        <DatePickerCell :value="task.start" :editable="!task.children.length" @update="updateStart" />
-        <DatePickerCell :value="task.end" :editable="!task.children.length" @update="updateEnd" />
+        <DateCell :value="task.start" :editable="!task.children.length" @update="updateStart" />
+        <DateCell :value="task.end" :from="task.start" :editable="!task.children.length" @update="updateEnd" />
         <td class="tasks-table__order">
                 <label v-show="!editOrder"
                        @click="changeOrder(task.id, task.order)"
@@ -42,11 +42,11 @@
 
 <script>
 import { mapActions } from 'vuex';
-import DatePickerCell from '@/components/DatePickerCell';
+import DateCell from '@/components/DateCell';
 
 export default {
     name: "TaskRow",
-    components: { DatePickerCell },
+    components: { DateCell },
     props: {
         task: Object
     },
@@ -56,12 +56,6 @@ export default {
             editOrder: false,
             inputOrderValue: 0
         }
-    },
-    computed: {
-        duration() {
-            const oneDay = 24 * 60 * 60 * 1000; // часы * минуты * секунды * мс = день
-            return Math.round(Math.abs((this.task.start - this.task.end) / oneDay))
-        },
     },
     methods: {
         ...mapActions(['setOrder']),
