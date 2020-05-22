@@ -81,6 +81,8 @@ export default {
         }
     },
     computed: {
+
+        // Сортировка задач по "Предшественник"
         sortTasks() {
             function sorting(js_object) {
                 function sortByKey(a, b) {
@@ -104,10 +106,12 @@ export default {
             return tasks
         },
 
+        // Поиск
         filterTasks() {
             return this.$_find(this.sortTasks, this.filterBy);
         },
 
+        // Список задач с установленным флажком
         toActionArray() {
             const flat = deepLoop(this.filterTasks);
             return flat.filter(task => {
@@ -116,6 +120,7 @@ export default {
         }
     },
     methods: {
+        // Вспомогательная функция, для поиска
         $_find(items, predicate) {
             let matches = [];
             for (let item of items) {
@@ -136,10 +141,12 @@ export default {
             return matches;
         },
 
+        // Для поиска
         filterBy(item) {
             return item.name.toLowerCase().includes(this.search.toLowerCase()) && !item.removed;
         },
 
+        // Toggle задач-категорий
         expand(id) {
             const bul =  this.expanded[id] ? 0 : 1;
             this.$set(this.expanded, id, bul);
@@ -149,6 +156,7 @@ export default {
         deepLoop(this.filterTasks).forEach(task => this.expand(task.id))
     },
     mounted() {
+        // Для корректного проставления часов
         setTimeout(() => {
             this.expanded = []
             this.loading = false

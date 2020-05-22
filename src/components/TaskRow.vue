@@ -48,7 +48,7 @@
         <td>{{ task.hours }} ч</td>
         <td class="tasks-table__select">
             <v-select v-if="!task.children || task.children.length < 1"
-                      @input="newResource => setResourse(task.id, newResource)"
+                      @input="newResource => putResourse(task.id, newResource)"
                       :options="$store.state.resources"
                       :value="task.resource"
                       :clearable="false">
@@ -101,7 +101,8 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['setFlag', 'setParentFlag']),
+        ...mapActions(['setFlag', 'setResource', 'setStart', 'setEnd', 'setName', 'setOrder']),
+
         changeName() {
             this.inputName = this.task.name;
             this.editName = true;
@@ -112,9 +113,10 @@ export default {
 
         saveName(id) {
             this.editName = false;
-            this.$store.commit('setName', { id, value: this.inputName });
+            this.setName({ id, value: this.inputName });
         },
 
+        // Рекактирование Предшественника
         changeOrder() {
             this.inputOrderValue = this.task.order;
             this.editOrder = true;
@@ -123,11 +125,13 @@ export default {
             })
         },
 
+        // Сохранение Предшественника
         saveOrder(id) {
             this.editOrder = false;
-            this.$store.commit('setOrder', { id, value: this.inputOrderValue });
+            this.setOrder({ id, value: this.inputOrderValue });
         },
 
+        // Предшественник может быть только числом
         onlyNumber ($event) {
             let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
             if ((keyCode < 48 || keyCode > 57)) {
@@ -135,8 +139,8 @@ export default {
             }
         },
 
-        setResourse(id, value) {
-            this.$store.commit('setResourse', { id, value })
+        putResourse(id, value) {
+            this.setResource({ id, value })
         },
 
         changeFlag() {
@@ -145,12 +149,12 @@ export default {
 
         updateStart(value) {
             const id = this.task.id;
-            this.$store.commit('setStart', { id, value })
+            this.setStart({ id, value })
         },
 
         updateEnd(value) {
             const id = this.task.id;
-            this.$store.commit('setEnd', { id, value })
+            this.setEnd({ id, value })
         }
     }
 }

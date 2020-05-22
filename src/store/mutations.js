@@ -3,6 +3,7 @@
 import deepLoop from "@/helpers/deep-loop"
 import setCategoryDates from "@/helpers/set-category-dates";
 
+// Для поиска задачи в дере по ключу id
 function findById(data, id) {
   function iter(a) {
     if (a.id === id) {
@@ -17,39 +18,37 @@ function findById(data, id) {
 }
 
 export default {
-  setName(state, { id, value }) {
+  SET_TASK(state, tasks) {
+    state.tasks = tasks
+  },
+
+  SET_NAME(state, { id, value }) {
     findById(state.tasks, id).name = value
   },
 
-  setOrder(state, { id, value }) {
+  SET_ORDER(state, { id, value }) {
     findById(state.tasks, id).order = value
   },
 
-  setStart(state, { id, value }) {
+  SET_START(state, { id, value }) {
     findById(state.tasks, id).start = value
     setCategoryDates(state.tasks)
   },
 
-  setEnd(state, { id, value }) {
+  SET_END(state, { id, value }) {
     findById(state.tasks, id).end = value
     setCategoryDates(state.tasks)
   },
 
-  setResourse(state, { id, value }) {
+  SET_RESOURCE(state, { id, value }) {
     findById(state.tasks, id).resource = value
   },
 
-  setHours(state, { id, value }) {
-    if(value) {
-      findById(state.tasks, id).hours = value
-    }
-  },
-
-  setFlag(state, { id, value }) {
+  SET_FLAG(state, { id, value }) {
     findById(state.tasks, id).checked = value;
   },
 
-  setParentFlag(state, id) {
+  UNSET_PARENT_FLAG(state, id) {
     const flatTasks = deepLoop(state.tasks);
 
     function getParent(ID) {
@@ -67,6 +66,12 @@ export default {
     state.checkAll = false;
   },
 
+  REMOVE_TASKS(state, items) {
+    items.forEach(item => {
+      findById(state.tasks, item.id).removed = true
+    })
+  },
+
   clearCheckboxes(state) {
     deepLoop(state.tasks).forEach(task => task.checked = false);
     state.checkAll = false;
@@ -74,11 +79,5 @@ export default {
 
   checkAll(state) {
     deepLoop(state.tasks).forEach(task => task.checked = state.checkAll);
-  },
-
-  removeTasks(state, items) {
-    items.forEach(item => {
-      findById(state.tasks, item.id).removed = true
-    })
   },
 };

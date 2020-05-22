@@ -19,12 +19,13 @@
                :msg="modal.msg"
                btnYes
                btnNo
-               @confirm="confirmRemove"
+               @confirm="removeTasks(items)"
                @close="modal.show = false" />
     </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import Modal from '@/components/Modal';
 import deepLoop from "@/helpers/deep-loop";
 
@@ -51,14 +52,11 @@ export default {
         }
     },
     methods: {
+        ...mapActions(['removeTasks']),
+
         remove() {
             this.modal.show = true;
             this.modal.msg = "Действительно ходите удалить " + this.itemsLine + "?";
-        },
-
-        confirmRemove() {
-            const items = this.items;
-            this.$store.commit('removeTasks', items)
         }
     }
 }
