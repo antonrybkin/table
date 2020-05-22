@@ -5,7 +5,7 @@
             <Checkbox v-model="value" />
         </td>
         <td class="tasks-table__name">
-            <div class="tasks-table__arrow" @click="$emit('expand', task.id)">
+            <div class="tasks-table__name-arrow" @click="$emit('expand', task.id)">
                 <svg
                   v-if="task.children && task.children.length"
                   alt="развернуть"

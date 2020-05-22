@@ -222,6 +222,15 @@ export default {
             display: flex;
         }
 
+        &-arrow {
+            position: absolute;
+            display: block;
+            margin-left: -21px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all .15s;
+        }
+
         &-label {
             display: block;
             width: 100%;
@@ -257,15 +266,6 @@ export default {
     &__lavel4 td:nth-child(3) {
         padding-left: 65px;
         text-align: left;
-    }
-
-    &__arrow {
-        position: absolute;
-        display: block;
-        margin-left: -21px;
-        padding: 10px;
-        cursor: pointer;
-        transition: all .15s;
     }
 
     &__white td {
