@@ -1,10 +1,24 @@
 <template>
     <tr :class="{ 'tasks-table__white' : task.children.length < 1, 'tasks-table__red' : task.redMark }" v-if="!task.removed">
         <th class="tasks-table__id"><div>{{ task.id }}</div></th>
-        <td class="tasks-table__checkbox"><input type="checkbox" :checked="value" @change="recursivelyCheck(task, $event.target.checked)" /></td>
+        <td class="tasks-table__checkbox">
+            <Checkbox v-model="value" />
+        </td>
         <td class="tasks-table__name">
-                <i v-if="task.children && task.children.length" class="tasks-table__arrow" @click="$emit('expand', task.id)" />
-                <label v-show="!editName"
+            <div class="tasks-table__arrow" @click="$emit('expand', task.id)">
+                <svg
+                  v-if="task.children && task.children.length"
+                  alt="развернуть"
+                  width="3"
+                  height="6"
+                  viewBox="0 0 3 6"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 3L0.75 0.401924L0.75 5.59808L3 3Z" fill="#AFB5BB"/>
+                </svg>
+            </div>
+
+            <label v-show="!editName"
                        @click="changeName"
                        class="tasks-table__name-label">{{ task.name }}</label>
                 <input v-show="editName"
@@ -40,7 +54,7 @@
                       :clearable="false">
                 <template #open-indicator="{ attributes }">
                     <span v-bind="attributes">
-                        &#9662;
+                        <img src="@/assets/img/icons/arrow_down.svg" alt="">
                     </span>
                 </template>
                 <span slot="no-options">Нет таких ресурсов</span>
@@ -52,16 +66,29 @@
 <script>
 import { mapActions } from 'vuex';
 import DateCell from '@/components/DateCell';
+import Checkbox from '@/components/Checkbox';
 
 export default {
     name: "TaskRow",
-    components: { DateCell },
+    components: { DateCell, Checkbox },
     props: {
         task: Object
     },
     computed: {
-        value() {
-            return this.task.checked
+        value: {
+            get: function () {
+                return this.task.checked
+            },
+            set: function (newValue) {
+                const recursivelyCheck = (el, val) => {
+                    const id = el.id;
+                    this.setFlag({ id, value: val });
+                    for(let child of el.children){
+                        recursivelyCheck(child, val)
+                    }
+                }
+                recursivelyCheck(this.task, newValue)
+            }
         }
     },
     data() {
@@ -110,14 +137,6 @@ export default {
 
         setResourse(id, value) {
             this.$store.commit('setResourse', { id, value })
-        },
-
-        recursivelyCheck(el, val) {
-            const id = el.id;
-            this.setFlag({ id, value: val });
-            for(let child of el.children){
-                this.recursivelyCheck(child, val)
-            }
         },
 
         changeFlag() {

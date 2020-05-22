@@ -10,7 +10,7 @@
                 <tr>
                     <th>#</th>
                     <th class="tasks-table__checkbox">
-                        <input type="checkbox" v-model="checkAll" @change="switchAllFlags()" />
+                        <Checkbox v-model="$store.state.checkAll" @input="$store.commit('checkAll')" />
                     </th>
                     <th>Название задачи</th>
                     <th>Длительность</th>
@@ -59,9 +59,7 @@
             </tbody>
         </table>
         <div v-if="filterTasks.length < 1" class="tasks-table__no-results">Нет задач.</div>
-        <TaskActions v-if="toActionArray.length"
-                     :items="toActionArray"
-                     @clearCheckboxes="clearCheckboxes" />
+        <TaskActions v-if="toActionArray.length" :items="toActionArray" />
     </div>
 </template>
 
@@ -70,14 +68,14 @@ import deepLoop from "@/helpers/deep-loop";
 import setCategoryDates from "@/helpers/set-category-dates";
 import TaskRow from '@/components/TaskRow';
 import TaskActions from '@/components/TaskActions';
+import Checkbox from '@/components/Checkbox';
 
 export default {
     name: "TasksTable",
-    components: { TaskActions, TaskRow },
+    components: { TaskActions, TaskRow, Checkbox },
     data() {
         return {
             search: "",
-            checkAll: false,
             expanded: [],
             loading: true
         }
@@ -140,15 +138,6 @@ export default {
 
         filterBy(item) {
             return item.name.toLowerCase().includes(this.search.toLowerCase()) && !item.removed;
-        },
-
-        clearCheckboxes() {
-            this.$store.commit('clearCheckboxes');
-            this.checkAll = false;
-        },
-
-        switchAllFlags() {
-            this.checkAll ? this.$store.commit('checkAll') : this.clearCheckboxes()
         },
 
         expand(id) {
@@ -223,15 +212,27 @@ export default {
         }
     }
 
-    &__checkbox {
-        width: 10px;
-    }
 
-    &__name {
+    .tasks-table__name {
+        padding: 0;
         width: 445px;
+        position: relative;
+
+        &-wrapper {
+            display: flex;
+        }
+
+        &-label {
+            display: block;
+            width: 100%;
+            padding: 10px 0;
+            cursor: text;
+        }
 
         &-input {
+            width: 100%;
             height: 10px;
+            padding: 10px 0;
             background: transparent;
             border: 0;
             outline: none;
@@ -261,12 +262,9 @@ export default {
     &__arrow {
         position: absolute;
         display: block;
-        border-color: transparent #AFB5BB;
-        border-style: solid;
-        border-width: 4px 0px 4px 3px;
-        height: 0px;
-        width: 0px;
-        margin: 3px 0 0 -13px;
+        margin-left: -21px;
+        padding: 10px;
+        cursor: pointer;
         transition: all .15s;
     }
 
@@ -283,12 +281,14 @@ export default {
             display: block;
             padding: 10px;
             width: 100px;
+            cursor: text;
         }
 
         &-input {
-            padding: 10px;
-            width: 96px;
-            height: 10px;
+            padding: 4px 8px;
+            width: 98px;
+            margin: 1px;
+            height: 18px;
             outline: none;
         }
     }
@@ -353,10 +353,12 @@ export default {
     }
 }
 
-
 .isOpen .tasks-table__arrow {
     transform: rotate(90deg);
     border-color: transparent #545C6A;
+    path {
+        fill: #545C6A;
+    }
 }
 
 .fade-enter-active,

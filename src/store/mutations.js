@@ -16,17 +16,6 @@ function findById(data, id) {
   return result
 }
 
-function getParent(root, id) {
-  var i, node;
-  for (var i = 0; i < root.length; i++) {
-    node = root[i];
-    if (node.id === id || node.children && (node = getParent(node.children, id))) {
-      return node;
-    }
-  }
-  return null;
-}
-
 export default {
   setName(state, { id, value }) {
     findById(state.tasks, id).name = value
@@ -61,19 +50,30 @@ export default {
   },
 
   setParentFlag(state, id) {
-    deepLoop(state.tasks).forEach(task => {
-      if(task.children.length > 0) {
-        if(task.children.some(t => t.id === id)) task.checked = false;
-      }
-    });
+    const flatTasks = deepLoop(state.tasks);
+
+    function getParent(ID) {
+      flatTasks.forEach(task => {
+        if(task.children.length > 0) {
+          if(task.children.some(t => t.id === ID)) {
+            task.checked = false;
+            getParent(task.id);
+          }
+        }
+      })
+    }
+
+    getParent(id);
+    state.checkAll = false;
   },
 
   clearCheckboxes(state) {
     deepLoop(state.tasks).forEach(task => task.checked = false);
+    state.checkAll = false;
   },
 
   checkAll(state) {
-    deepLoop(state.tasks).forEach(task => task.checked = true);
+    deepLoop(state.tasks).forEach(task => task.checked = state.checkAll);
   },
 
   removeTasks(state, items) {

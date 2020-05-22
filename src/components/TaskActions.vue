@@ -1,6 +1,6 @@
 <template>
     <div class="tasks-table__actions">
-        <div class="tasks-table__actions__clear" @click="$emit('clearCheckboxes')"><img src="@/assets/img/icons/close.svg" alt=""></div>
+        <div class="tasks-table__actions__clear" @click="$store.commit('clearCheckboxes')"><img src="@/assets/img/icons/close.svg" alt=""></div>
         <div>Выбрано: {{ items.length }}</div>
         <div class="tasks-table__actions__remove" @click="remove"><img src="@/assets/img/icons/remove.svg" alt=""></div>
         <div class="tasks-table__actions__remove"><img src="@/assets/img/icons/category.svg" alt=""></div>
