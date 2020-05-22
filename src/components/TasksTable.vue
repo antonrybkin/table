@@ -113,7 +113,7 @@ export default {
         toActionArray() {
             const flat = deepLoop(this.filterTasks);
             return flat.filter(task => {
-                return task.checked === true
+                return task.checked === true && task.removed === false
             })
         }
     },
@@ -139,7 +139,7 @@ export default {
         },
 
         filterBy(item) {
-            return item.name.toLowerCase().includes(this.search.toLowerCase());
+            return item.name.toLowerCase().includes(this.search.toLowerCase()) && !item.removed;
         },
 
         clearCheckboxes() {
@@ -229,6 +229,13 @@ export default {
 
     &__name {
         width: 445px;
+
+        &-input {
+            height: 10px;
+            background: transparent;
+            border: 0;
+            outline: none;
+        }
     }
 
     &__lavel1 td:nth-child(3) {

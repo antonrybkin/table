@@ -16,8 +16,23 @@ function findById(data, id) {
   return result
 }
 
+function getParent(root, id) {
+  var i, node;
+  for (var i = 0; i < root.length; i++) {
+    node = root[i];
+    if (node.id === id || node.children && (node = getParent(node.children, id))) {
+      return node;
+    }
+  }
+  return null;
+}
+
 export default {
-  SET_ORDER(state, { id, value }) {
+  setName(state, { id, value }) {
+    findById(state.tasks, id).name = value
+  },
+
+  setOrder(state, { id, value }) {
     findById(state.tasks, id).order = value
   },
 
@@ -36,15 +51,21 @@ export default {
   },
 
   setHours(state, { id, value }) {
-    //console.log(value);
     if(value) {
-      console.log(value);
       findById(state.tasks, id).hours = value
     }
   },
 
   setFlag(state, { id, value }) {
-    findById(state.tasks, id).checked = value
+    findById(state.tasks, id).checked = value;
+  },
+
+  setParentFlag(state, id) {
+    deepLoop(state.tasks).forEach(task => {
+      if(task.children.length > 0) {
+        if(task.children.some(t => t.id === id)) task.checked = false;
+      }
+    });
   },
 
   clearCheckboxes(state) {
@@ -56,11 +77,8 @@ export default {
   },
 
   removeTasks(state, items) {
-    const flat = deepLoop(state.tasks)
     items.forEach(item => {
-      const i = state.tasks.map(item => item.id).indexOf(item.id);
-      console.log(i);
-      state.tasks.splice(i, 1);
+      findById(state.tasks, item.id).removed = true
     })
   },
 };

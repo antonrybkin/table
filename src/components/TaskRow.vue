@@ -1,17 +1,26 @@
 <template>
-    <tr :class="{ 'tasks-table__white' : task.children.length < 1, 'tasks-table__red' : task.redMark }">
+    <tr :class="{ 'tasks-table__white' : task.children.length < 1, 'tasks-table__red' : task.redMark }" v-if="!task.removed">
         <th class="tasks-table__id"><div>{{ task.id }}</div></th>
-        <td class="tasks-table__checkbox"><input type="checkbox" :checked="task.checked" @change="changeFlag" /></td>
-        <td class="tasks-table__name" @click="$emit('expand', task.id)">
-                <i v-if="task.children && task.children.length" class="tasks-table__arrow" />
-                {{ task.name }}
+        <td class="tasks-table__checkbox"><input type="checkbox" :checked="value" @change="recursivelyCheck(task, $event.target.checked)" /></td>
+        <td class="tasks-table__name">
+                <i v-if="task.children && task.children.length" class="tasks-table__arrow" @click="$emit('expand', task.id)" />
+                <label v-show="!editName"
+                       @click="changeName"
+                       class="tasks-table__name-label">{{ task.name }}</label>
+                <input v-show="editName"
+                       ref="inputName"
+                       type="text"
+                       v-model="inputName"
+                       v-on:blur="saveName(task.id)"
+                       @keyup.enter="saveName(task.id)"
+                       class="tasks-table__name-input">
         </td>
         <td>{{ task.duration }} дней</td>
         <DateCell :value="task.start" :editable="!task.children.length" @update="updateStart" />
         <DateCell :value="task.end" :from="task.start" :editable="!task.children.length" @update="updateEnd" />
         <td class="tasks-table__order">
                 <label v-show="!editOrder"
-                       @click="changeOrder(task.id, task.order)"
+                       @click="changeOrder"
                        class="tasks-table__order-label">{{ task.order }}</label>
                 <input v-show="editOrder"
                        ref="inputOrder"
@@ -50,18 +59,37 @@ export default {
     props: {
         task: Object
     },
+    computed: {
+        value() {
+            return this.task.checked
+        }
+    },
     data() {
         return {
             checked: this.task.checked,
+            editName: false,
             editOrder: false,
+            inputName: "",
             inputOrderValue: 0
         }
     },
     methods: {
-        ...mapActions(['setOrder']),
+        ...mapActions(['setFlag', 'setParentFlag']),
+        changeName() {
+            this.inputName = this.task.name;
+            this.editName = true;
+            this.$nextTick(() => {
+                this.$refs.inputName.focus();
+            })
+        },
 
-        changeOrder(id, orderId) {
-            this.inputOrderValue = orderId;
+        saveName(id) {
+            this.editName = false;
+            this.$store.commit('setName', { id, value: this.inputName });
+        },
+
+        changeOrder() {
+            this.inputOrderValue = this.task.order;
             this.editOrder = true;
             this.$nextTick(() => {
                 this.$refs.inputOrder.focus();
@@ -70,7 +98,7 @@ export default {
 
         saveOrder(id) {
             this.editOrder = false;
-            this.setOrder({ id, value: this.inputOrderValue });
+            this.$store.commit('setOrder', { id, value: this.inputOrderValue });
         },
 
         onlyNumber ($event) {
@@ -84,17 +112,15 @@ export default {
             this.$store.commit('setResourse', { id, value })
         },
 
-        recursivelyCheck(task) {
-            const id = task.id;
-            const value = this.checked;
-            this.$store.commit('setFlag', { id, value })
-            for(let child of task.children){
-                this.recursivelyCheck(child)
+        recursivelyCheck(el, val) {
+            const id = el.id;
+            this.setFlag({ id, value: val });
+            for(let child of el.children){
+                this.recursivelyCheck(child, val)
             }
         },
 
         changeFlag() {
-            this.checked = !this.checked;
             this.recursivelyCheck(this.task)
         },
 

@@ -15,8 +15,12 @@
             <span slot="no-options">Не найдено</span>
         </v-select>
         <button class="tasks-table__actions__btn">Установить</button>
-
-        <modal :show="modal.show" :msg="modal.msg" btnOk="Нет" @close="modal.show = false" />
+        <modal :show="modal.show"
+               :msg="modal.msg"
+               btnYes
+               btnNo
+               @confirm="confirmRemove"
+               @close="modal.show = false" />
     </div>
 </template>
 
@@ -36,7 +40,8 @@ export default {
             modal: {
                 show: false,
                 msg: "",
-            }
+            },
+            itemsLine: this.items.map(item => ' ' + item.name).join()
         }
     },
     computed: {
@@ -48,10 +53,12 @@ export default {
     methods: {
         remove() {
             this.modal.show = true;
-            this.modal.msg = "Серьёздно?"
+            this.modal.msg = "Действительно ходите удалить " + this.itemsLine + "?";
+        },
 
-            // const items = this.items;
-            // this.$store.commit('removeTasks', items)
+        confirmRemove() {
+            const items = this.items;
+            this.$store.commit('removeTasks', items)
         }
     }
 }

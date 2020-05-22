@@ -1,7 +1,10 @@
 // https://vuex.vuejs.org/en/actions.html
 
 export default {
-  setOrder(context, { id, value }) {
-    context.commit(`SET_ORDER`, { id, value })
-  },
+    setFlag(context, { id, value }) {
+        context.commit(`setFlag`, { id, value })
+        if(value === false) {
+            context.commit(`setParentFlag`, id)
+        }
+    },
 };
