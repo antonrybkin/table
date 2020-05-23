@@ -30,21 +30,21 @@
                              @expand="expand" />
                     <template v-if="task.id in expanded && expanded[task.id]">
                         <template v-for="taskLavel2 in task.children">
-                            <TaskRow :key="taskLavel2.id"
+                            <TaskRow :key="`key2-${taskLavel2.id}`"
                                      :task="taskLavel2"
                                      class="tasks-table__lavel2"
                                      :class="{ 'isOpen' : expanded[taskLavel2.id] }"
                                      @expand="expand" />
                             <template v-if="taskLavel2.id in expanded && expanded[taskLavel2.id]">
                                 <template v-for="taskLavel3 in taskLavel2.children">
-                                    <TaskRow :key="taskLavel3.id"
+                                    <TaskRow :key="`key3-${taskLavel3.id}`"
                                              :task="taskLavel3"
                                              class="tasks-table__lavel3"
                                              :class="{ 'isOpen' : expanded[taskLavel3.id] }"
                                              @expand="expand" />
                                     <template v-if="taskLavel3.id in expanded && expanded[taskLavel3.id]">
                                         <template v-for="taskLavel4 in taskLavel3.children">
-                                            <TaskRow :key="taskLavel4.id"
+                                            <TaskRow :key="`key4-${taskLavel4.id}`"
                                                      :task="taskLavel4"
                                                      class="tasks-table__lavel4"
                                                      :class="{ 'isOpen' : expanded[taskLavel4.id] }"
@@ -361,7 +361,7 @@ export default {
     }
 }
 
-.isOpen .tasks-table__arrow {
+.isOpen .tasks-table__name-arrow {
     transform: rotate(90deg);
     border-color: transparent #545C6A;
     path {
