@@ -11,7 +11,6 @@ export default {
       order: 0,
       redMark: false,
       resource: null,
-      removed: false,
       children: [
         {
           id: 2,
@@ -23,7 +22,6 @@ export default {
           order: 1,
           redMark: false,
           resource: null,
-          removed: false,
           children: [
             {
               id: 3,
@@ -35,7 +33,6 @@ export default {
               order: 2,
               redMark: true,
               resource: "Разработчик 1",
-              removed: false,
               children: []
             },
             {
@@ -48,7 +45,6 @@ export default {
               order: 3,
               redMark: true,
               resource: "Разработчик 2",
-              removed: false,
               children: []
             }
           ]
@@ -63,7 +59,6 @@ export default {
           order: 31,
           redMark: false,
           resource: null,
-          removed: false,
           children: [
             {
               id: 32,
@@ -75,7 +70,6 @@ export default {
               order: 1,
               redMark: false,
               resource: null,
-              removed: false,
               children: [
                 {
                   id: 33,
@@ -87,7 +81,6 @@ export default {
                   order: 32,
                   redMark: true,
                   resource: "Антон",
-                  removed: false,
                   children: []
                 },
                 {
@@ -100,7 +93,6 @@ export default {
                   order: 33,
                   redMark: false,
                   resource: "Разработчик 2",
-                  removed: false,
                   children: []
                 },
                 {
@@ -113,7 +105,6 @@ export default {
                   order: 34,
                   redMark: false,
                   resource: "Разработчик 1",
-                  removed: false,
                   children: []
                 }
               ]
@@ -130,7 +121,6 @@ export default {
           order: 31,
           redMark: false,
           resource: null,
-          removed: false,
           children: [
             {
               id: 63,
@@ -142,7 +132,6 @@ export default {
               order: 31,
               redMark: false,
               resource: "Разработчик 1",
-              removed: false,
               children: []
             }
           ]
@@ -157,7 +146,6 @@ export default {
           order: 53,
           redMark: false,
           resource: null,
-          removed: false,
           children: [
             {
               id: 100,
@@ -169,7 +157,6 @@ export default {
               order: 99,
               redMark: false,
               resource: "Разработчик 1",
-              removed: false,
               children: []
             },
             {
@@ -182,12 +169,35 @@ export default {
               order: 100,
               redMark: false,
               resource: "Разработчик 1",
-              removed: false,
               children: []
             }
           ]
         },
       ]
+    },
+    {
+      id: 150,
+      checked: false,
+      hours: 0,
+      name: "Таблица ресурсов",
+      start: "2020-04-23T18:25:43.511Z",
+      end: "2020-04-30T18:25:43.511Z",
+      order: 99,
+      redMark: false,
+      resource: "Разработчик 1",
+      children: []
+    },
+    {
+      id: 152,
+      checked: false,
+      hours: 0,
+      name: "Stopcovid",
+      start: "2020-04-23T18:25:43.511Z",
+      end: "2020-04-30T18:25:43.511Z",
+      order: 100,
+      redMark: false,
+      resource: "Разработчик 1",
+      children: []
     }
   ],
 

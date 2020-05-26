@@ -42,4 +42,10 @@ export default {
         // ЗДЕСЬ БУДЕТ ЗАПРОС НА УДАЛЕНИЕ ЗАДАЧИ С СЕРВЕРА
         context.commit(`REMOVE_TASKS`, items)
     },
+
+    changeCategory(context, { id, items }) {
+        // ЗДЕСЬ БУДЕТ ЗАПРОС НА СМЕНУ ВЛОЖЕННОСТИ
+        context.commit(`REMOVE_TASKS`, items)
+        context.commit(`SET_CATEGORY`, { id, items })
+    },
 };

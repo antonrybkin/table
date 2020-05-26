@@ -21,7 +21,7 @@
                     <th>Название ресурсов</th>
                 </tr>
             </thead>
-            <tbody v-show="!loading">
+            <draggable v-model="flat" tag="tbody" :move="move" @change="dragChanges">
                 <template v-for="task in filterTasks">
                     <TaskRow :key="task.id"
                              :task="task"
@@ -29,22 +29,22 @@
                              :class="{ 'isOpen' : expanded[task.id] }"
                              @expand="expand" />
                     <template v-if="task.id in expanded && expanded[task.id]">
-                        <template v-for="taskLavel2 in task.children">
-                            <TaskRow :key="`key2-${taskLavel2.id}`"
+                        <template v-for="(taskLavel2, index1) in task.children">
+                            <TaskRow :key="`key1${index1}-${taskLavel2.id}`"
                                      :task="taskLavel2"
                                      class="tasks-table__lavel2"
                                      :class="{ 'isOpen' : expanded[taskLavel2.id] }"
                                      @expand="expand" />
                             <template v-if="taskLavel2.id in expanded && expanded[taskLavel2.id]">
-                                <template v-for="taskLavel3 in taskLavel2.children">
-                                    <TaskRow :key="`key3-${taskLavel3.id}`"
+                                <template v-for="(taskLavel3, index2) in taskLavel2.children">
+                                    <TaskRow :key="`key2${index2}-${taskLavel3.id}`"
                                              :task="taskLavel3"
                                              class="tasks-table__lavel3"
                                              :class="{ 'isOpen' : expanded[taskLavel3.id] }"
                                              @expand="expand" />
                                     <template v-if="taskLavel3.id in expanded && expanded[taskLavel3.id]">
-                                        <template v-for="taskLavel4 in taskLavel3.children">
-                                            <TaskRow :key="`key4-${taskLavel4.id}`"
+                                        <template v-for="(taskLavel4, index3) in taskLavel3.children">
+                                            <TaskRow :key="`key3${index3}-${taskLavel4.id}`"
                                                      :task="taskLavel4"
                                                      class="tasks-table__lavel4"
                                                      :class="{ 'isOpen' : expanded[taskLavel4.id] }"
@@ -56,70 +56,72 @@
                         </template>
                     </template>
                 </template>
-            </tbody>
+            </draggable>
         </table>
         <div v-if="filterTasks.length < 1" class="tasks-table__no-results">Нет задач.</div>
         <TaskActions v-if="toActionArray.length" :items="toActionArray" />
+
+        <modal :show="modal.show"
+               :msg="modal.msg"
+               btnYes
+               btnNo
+               @confirm="modal.show = false"
+               @close="modal.show = false" />
     </div>
 </template>
 
 <script>
+import draggable from 'vuedraggable'
+import { mapActions } from 'vuex';
 import deepLoop from "@/helpers/deep-loop";
-import setCategoryDates from "@/helpers/set-category-dates";
 import TaskRow from '@/components/TaskRow';
 import TaskActions from '@/components/TaskActions';
 import Checkbox from '@/components/Checkbox';
+import Modal from '@/components/Modal';
 
 export default {
     name: "TasksTable",
-    components: { TaskActions, TaskRow, Checkbox },
+    components: { TaskActions, TaskRow, Checkbox, draggable, Modal },
     data() {
         return {
             search: "",
             expanded: [],
-            loading: true
+            loading: true,
+            relatedContextId: null,
+            modal: {
+                show: false,
+                msg: "",
+            },
         }
     },
     computed: {
-
-        // Сортировка задач по "Предшественник"
-        sortTasks() {
-            function sorting(js_object) {
-                function sortByKey(a, b) {
-                    const x = a.order;
-                    const y = b.order;
-                    return ((x > y) ? 1 : ((x < y) ? -1 : 0));
-                };
-                js_object.sort(sortByKey);
-            };
-
-            function sortTasks(tasks) {
-                sorting(tasks);
-                for (let i = 0; i < tasks.length; i++)
-                    if (tasks[i].hasOwnProperty('children'))
-                        sortTasks(tasks[i].children);
-            };
-
-            const tasks = this.$store.getters.tasks;
-            setCategoryDates(tasks);
-            sortTasks(tasks);
-            return tasks
+        // Поиск
+        filterTasks: {
+            get() {
+                return this.$_find(this.$store.getters.tasks, this.filterBy);
+            },
+            set(value) {
+                console.log(value);
+            }
         },
 
-        // Поиск
-        filterTasks() {
-            return this.$_find(this.sortTasks, this.filterBy);
+        flat: {
+            get() {
+                return deepLoop(this.filterTasks)
+            },
+            set(value) {
+                // console.log(value);
+            }
         },
 
         // Список задач с установленным флажком
         toActionArray() {
-            const flat = deepLoop(this.filterTasks);
-            return flat.filter(task => {
-                return task.checked === true && task.removed === false
-            })
+            return this.flat.filter(task => task.checked === true)
         }
     },
     methods: {
+        ...mapActions(['changeCategory']),
+
         // Вспомогательная функция, для поиска
         $_find(items, predicate) {
             let matches = [];
@@ -141,9 +143,30 @@ export default {
             return matches;
         },
 
+        move(value) {
+            this.relatedContextId = value.relatedContext.element.id
+        },
+
+        dragChanges(event) {
+            if(this.relatedContextId !== event.moved.element.id) {
+                const items = [event.moved.element];
+                this.modal.show = true;
+                this.modal.msg = "Переметить "+ items[0].id + " в " + this.relatedContextId + "?";
+                // this.flat.forEach(task => {
+                //     if(task.children.length > 0) {
+                //         if(task.children.some(t => t.id === this.relatedContextId)) {
+                //             this.changeCategory({ id: task.id, items });
+                //         } else {
+                //             this.changeCategory({ id: "root", items });
+                //         }
+                //     }
+                // })
+            }
+        },
+
         // Для поиска
         filterBy(item) {
-            return item.name.toLowerCase().includes(this.search.toLowerCase()) && !item.removed;
+            return item.name.toLowerCase().includes(this.search.toLowerCase());
         },
 
         // Toggle задач-категорий

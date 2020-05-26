@@ -14,7 +14,8 @@
             </template>
             <span slot="no-options">Не найдено</span>
         </v-select>
-        <button class="tasks-table__actions__btn">Установить</button>
+        <button class="tasks-table__actions__btn" @click="setCategory">Установить</button>
+
         <modal :show="modal.show"
                :msg="modal.msg"
                btnYes
@@ -37,7 +38,7 @@ export default {
     },
     data() {
         return {
-            selectedCategory: "",
+            selectedCategory: null,
             modal: {
                 show: false,
                 msg: "",
@@ -47,12 +48,22 @@ export default {
     },
     computed: {
         taskNames() {
-            const tasks = deepLoop(this.$store.getters.tasks);
-            return tasks.map(task => task.name);
+            let tasks = deepLoop(this.$store.getters.tasks).map(task => {
+                return { label: task.name, value: task.id, sId: Math.random() }
+            });
+            tasks.unshift({ label: "...", value: "root" });
+            const filtredTasks = tasks.filter(task => typeof task === "object" && task !== null);
+            return filtredTasks
         }
     },
     methods: {
-        ...mapActions(['removeTasks']),
+        ...mapActions(['removeTasks', 'changeCategory']),
+
+        setCategory(){
+            const id = this.selectedCategory.value;
+            const items = this.items;
+            this.changeCategory({ id, items });
+        },
 
         remove() {
             this.modal.show = true;

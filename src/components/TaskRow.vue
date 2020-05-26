@@ -1,5 +1,5 @@
 <template>
-    <tr :class="{ 'tasks-table__white' : task.children.length < 1, 'tasks-table__red' : task.redMark }" v-if="!task.removed">
+    <tr :class="{ 'tasks-table__white' : task.children.length < 1, 'tasks-table__red' : task.redMark }">
         <th class="tasks-table__id"><div>{{ task.id }}</div></th>
         <td class="tasks-table__checkbox">
             <Checkbox v-model="value" />
