@@ -112,7 +112,9 @@ export default {
     let newItems =[];
     items.forEach(task => {
       const newItem = goClone(task);
+      newItem.removed = false;
       newItem.checked = false;
+      newItem.children = [];
       newItems.push(newItem)
     })
     id === "root" ? state.tasks.push(...newItems) : findById(state.tasks, id).children.push(...newItems);
