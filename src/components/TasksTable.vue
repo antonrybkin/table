@@ -417,7 +417,7 @@ export default {
                     width: 1px;
                     height: calc(100% + 2px);
                     left: -1px;
-                    top: 0;
+                    top: -1px;
                 }
 
                 &:after {
