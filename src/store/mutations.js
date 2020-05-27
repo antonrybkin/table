@@ -90,25 +90,32 @@ export default {
     state.checkAll = false;
   },
 
+  PRE_REMOVE_TASKS(state, items) {
+    items.forEach(item => {
+      let find = findById(state.tasks, item.id)
+      if(find !== undefined) find.removed = true
+    })
+  },
+
   REMOVE_TASKS(state, items) {
     items.forEach(item => {
       function removeChain(tasks) {
-        const fi = tasks.findIndex(task => task.id === item.id)
+        const fi = tasks.findIndex(task => task.removed === true)
         if(fi >= 0) {
           tasks.splice(fi, 1)
+        } else {
+          tasks.forEach(t => {
+            if(t.children.length > 0) {
+              removeChain(t.children)
+            }
+          })
         }
-        tasks.forEach(t => {
-          if(t.children.length > 0) {
-            removeChain(t.children)
-          }
-        })
       }
       removeChain(state.tasks)
     })
   },
 
   SET_CATEGORY(state, { id, items }) {
-    console.log({ id, items });
     let newItems =[];
     items.forEach(task => {
       const newItem = goClone(task);
@@ -117,7 +124,12 @@ export default {
       newItem.children = [];
       newItems.push(newItem)
     })
-    id === "root" ? state.tasks.push(...newItems) : findById(state.tasks, id).children.push(...newItems);
+    if(id === "root") {
+      state.tasks.push(...newItems)
+    } else {
+      let find = findById(state.tasks, id)
+      if(find !== undefined) find.children.push(...newItems);
+    }
   },
 
   clearCheckboxes(state) {

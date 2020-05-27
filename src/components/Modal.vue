@@ -3,7 +3,9 @@
         <div class="modal-mask" v-if="show">
             <div class="modal-wrapper">
                 <div class="modal-container">
-                    <div class="modal-body">{{ msg }}</div>
+                    <div class="modal-body">
+                        <slot></slot>
+                    </div>
                     <div class="modal-footer">
                         <button v-if="btnNo" class="modal-default-button" @click="$emit('close')">Нет</button>
                         <button v-if="btnYes" class="modal-default-button" @click="$emit('confirm')">Да</button>
@@ -22,7 +24,6 @@ export default {
             type: Boolean,
             default: false
         },
-        msg: String,
         btnYes: {
             type: Boolean,
             default: false

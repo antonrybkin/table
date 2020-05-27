@@ -40,12 +40,14 @@ export default {
 
     removeTasks(context, items) {
         // ЗДЕСЬ БУДЕТ ЗАПРОС НА УДАЛЕНИЕ ЗАДАЧИ С СЕРВЕРА
+        context.commit(`PRE_REMOVE_TASKS`, items)
         context.commit(`REMOVE_TASKS`, items)
     },
 
     changeCategory(context, { id, items }) {
         // ЗДЕСЬ БУДЕТ ЗАПРОС НА СМЕНУ ВЛОЖЕННОСТИ
-        context.commit(`REMOVE_TASKS`, items)
+        context.commit(`PRE_REMOVE_TASKS`, items)
         context.commit(`SET_CATEGORY`, { id, items })
+        context.commit(`REMOVE_TASKS`, items)
     },
 };

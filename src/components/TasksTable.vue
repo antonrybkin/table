@@ -21,7 +21,7 @@
                     <th>Название ресурсов</th>
                 </tr>
             </thead>
-            <draggable v-model="flat" tag="tbody" :move="move" @change="dragChanges">
+            <draggable v-show="!loading" v-model="flat" tag="tbody" :move="moveRow" @change="dragRow" handle=".tasks-table__id">
                 <template v-for="task in filterTasks">
                     <TaskRow :key="task.id"
                              :task="task"
@@ -62,11 +62,12 @@
         <TaskActions v-if="toActionArray.length" :items="toActionArray" />
 
         <modal :show="modal.show"
-               :msg="modal.msg"
                btnYes
                btnNo
-               @confirm="modal.show = false"
-               @close="modal.show = false" />
+               @confirm="confirmDragRow"
+               @close="modal.show = false">
+            Переметить задачу <b>{{ drag.item.name }}</b> с подзадачами в категорию <b>{{ drag.category.name }}</b>?
+        </modal>
     </div>
 </template>
 
@@ -87,10 +88,22 @@ export default {
             search: "",
             expanded: [],
             loading: true,
-            relatedContextId: null,
+            drag: {
+                relatedContext: {
+                    id: null,
+                    name: '',
+                },
+                category: {
+                    id: null,
+                    name: '',
+                },
+                item: {
+                    id: null,
+                    name: '',
+                }
+            },
             modal: {
                 show: false,
-                msg: "",
             },
         }
     },
@@ -143,27 +156,6 @@ export default {
             return matches;
         },
 
-        move(value) {
-            this.relatedContextId = value.relatedContext.element.id
-        },
-
-        dragChanges(event) {
-            if(this.relatedContextId !== event.moved.element.id) {
-                const items = [event.moved.element];
-                this.modal.show = true;
-                this.modal.msg = "Переметить "+ items[0].id + " в " + this.relatedContextId + "?";
-                // this.flat.forEach(task => {
-                //     if(task.children.length > 0) {
-                //         if(task.children.some(t => t.id === this.relatedContextId)) {
-                //             this.changeCategory({ id: task.id, items });
-                //         } else {
-                //             this.changeCategory({ id: "root", items });
-                //         }
-                //     }
-                // })
-            }
-        },
-
         // Для поиска
         filterBy(item) {
             return item.name.toLowerCase().includes(this.search.toLowerCase());
@@ -173,6 +165,51 @@ export default {
         expand(id) {
             const bul =  this.expanded[id] ? 0 : 1;
             this.$set(this.expanded, id, bul);
+        },
+
+        // Следим за перемещеием строк
+        moveRow(value) {
+            this.drag.relatedContext.id = value.originalEvent.target.textContent;
+            this.drag.item = this.flat.find(task => task.id.toString() === value.dragged.cells[0].textContent);
+        },
+
+        // Обработчик перемещения строки
+        dragRow(event) {
+            const childrenIds = this.drag.item.children.length > 0 ? this.drag.item.children.map(task => task.id) : null;
+            // Запрещаем перемещать задачу в саму себя и в свои дочерние задачи следующей проверкой:
+            if((this.drag.relatedContext.id !== this.drag.item.id.toString())
+                && (childrenIds === null || !(childrenIds.includes(Number(this.drag.relatedContext.id))))) {
+                this.modal.show = true; // Показываем окно-подтверждение
+                // Ищем и запоминаем родителя
+                this.flat.forEach(task => {
+                    if(task.children.length > 0) {
+                        if(task.children.some(t => t.id.toString() === this.drag.relatedContext.id)) {
+                            this.drag.category = task;
+                        }
+                    }
+                })
+
+                // Если родитель не нашёлся, то это корневая категория
+                if(this.drag.category.name === "") this.drag.category = { name: "Корень", id: "root" };
+            }
+        },
+
+        // Подтверждение перемещения строки
+        confirmDragRow() {
+            this.modal.show = false; // Скрываем окно-подтверждение
+            let items = [this.drag.item]; // Добавляем перемещаемую задачу в пустой массив
+
+            // Добавляем в массив все дочерние задачи
+            function includeChildren(task) {
+                if(task.children.length > 0) {
+                    items.push(...task.children)
+                    task.children.forEach(t => includeChildren(t))
+                }
+            }
+            includeChildren(this.drag.item);
+
+            // Запускаем действие (action) смены категории (id) для массива items
+            this.changeCategory({ id: this.drag.category.id, items });
         }
     },
     created() {
@@ -236,6 +273,7 @@ export default {
         background: #F0F0F0;
         width: 45px;
         min-width: 45px;
+        cursor: move;
 
         div {
             text-align: left;

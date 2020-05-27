@@ -18,10 +18,10 @@
 
         <modal :show="modal.show"
                :msg="modal.msg"
-               btnYes
+               :btnYes="modal.btnYes"
                btnNo
                @confirm="removeTasks(items)"
-               @close="modal.show = false" />
+               @close="modal.show = false, modal.btnYes = true">{{ modal.msg }}</modal>
     </div>
 </template>
 
@@ -42,6 +42,7 @@ export default {
             modal: {
                 show: false,
                 msg: "",
+                btnYes: true
             },
             itemsLine: this.items.map(item => ' ' + item.name).join()
         }
@@ -62,7 +63,14 @@ export default {
         setCategory(){
             const id = this.selectedCategory.value;
             const items = this.items;
-            this.changeCategory({ id, items });
+            const itemsIds = items.map(task => task.id);
+            if(itemsIds.includes(id)) {
+                this.modal.show = true;
+                this.modal.msg = "Нельзя переместить задачу внтрь этой же задачи.";
+                this.modal.btnYes = false;
+            } else {
+                this.changeCategory({ id, items });
+            }
         },
 
         remove() {
