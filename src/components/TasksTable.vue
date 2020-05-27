@@ -255,7 +255,6 @@ export default {
         }
 
         th, td {
-            box-sizing: border-box;
             border: 2px solid #D3D3D3;
             text-align: left;
             font-weight: bold;
@@ -263,6 +262,7 @@ export default {
         }
 
         td {
+            border-collapse: collapse;
             padding: 0;
             background: #F0F0F0;
             text-align: right;
@@ -298,6 +298,7 @@ export default {
         .tasks__table__name {
             width: 445px;
             position: relative;
+            box-sizing: border-box;
 
             &__wrapper {
                 display: flex;
@@ -329,22 +330,22 @@ export default {
             }
         }
 
-        &__lavel1 td:nth-child(3) {
+        &__lavel1 &__name {
             padding-left: 30px;
             text-align: left;
         }
 
-        &__lavel2 td:nth-child(3) {
+        &__lavel2 &__name {
             padding-left: 50px;
             text-align: left;
         }
 
-        &__lavel3 td:nth-child(3) {
+        &__lavel3 &__name {
             padding-left: 60px;
             text-align: left;
         }
 
-        &__lavel4 td:nth-child(3) {
+        &__lavel4 &__name {
             padding-left: 65px;
             text-align: left;
         }

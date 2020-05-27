@@ -4,30 +4,32 @@
         <td>
             <Checkbox v-model="value" />
         </td>
-        <td class="tasks__table__name">
-            <div class="tasks__table__name__arrow" @click="$emit('expand', task.id)">
-                <svg
-                  v-if="task.children && task.children.length"
-                  alt="развернуть"
-                  width="3"
-                  height="6"
-                  viewBox="0 0 3 6"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3 3L0.75 0.401924L0.75 5.59808L3 3Z" fill="#AFB5BB"/>
-                </svg>
-            </div>
+        <td>
+            <div class="tasks__table__name">
+                <div class="tasks__table__name__arrow" @click="$emit('expand', task.id)">
+                    <svg
+                      v-if="task.children && task.children.length"
+                      alt="развернуть"
+                      width="3"
+                      height="6"
+                      viewBox="0 0 3 6"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3 3L0.75 0.401924L0.75 5.59808L3 3Z" fill="#AFB5BB"/>
+                    </svg>
+                </div>
 
-            <label v-show="!editName"
-                       @click="changeName"
-                       class="tasks__table__name__label">{{ task.name }}</label>
-                <input v-show="editName"
-                       ref="inputName"
-                       type="text"
-                       v-model="inputName"
-                       v-on:blur="saveName(task.id)"
-                       @keyup.enter="saveName(task.id)"
-                       class="tasks__table__name__input">
+                <label v-show="!editName"
+                           @click="changeName"
+                           class="tasks__table__name__label">{{ task.name }}</label>
+                    <input v-show="editName"
+                           ref="inputName"
+                           type="text"
+                           v-model="inputName"
+                           v-on:blur="saveName(task.id)"
+                           @keyup.enter="saveName(task.id)"
+                           class="tasks__table__name__input">
+            </div>
         </td>
         <td><div class="tasks__table__padding-cell">{{ task.duration }} дней</div></td>
         <DateCell :value="task.start" :editable="!task.children.length" @update="updateStart" />
