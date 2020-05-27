@@ -1,12 +1,18 @@
 <template>
     <div class="tasks__actions">
-        <div class="tasks__actions__clear" @click="$store.commit('clearCheckboxes')"><img src="@/assets/img/icons/close.svg" alt=""></div>
+        <div class="tasks__actions__clear" @click="$store.commit('clearCheckboxes')">
+            <img src="@/assets/img/icons/close.svg" alt="">
+        </div>
         <div>Выбрано: {{ items.length }}</div>
-        <div class="tasks__actions__remove" @click="remove"><img src="@/assets/img/icons/remove.svg" alt=""></div>
-        <div class="tasks__actions__remove"><img src="@/assets/img/icons/category.svg" alt=""></div>
+        <div class="tasks__actions__remove" @click="remove">
+            <img src="@/assets/img/icons/remove.svg" alt="">
+        </div>
+        <div class="tasks__actions__remove">
+            <img src="@/assets/img/icons/category.svg" alt="">
+        </div>
         <v-select :options="taskNames"
                   v-model="selectedCategory"
-                  :clearable="false" class="tasks-table__actions__select">
+                  :clearable="false" class="tasks__actions__select">
             <template #open-indicator="{ attributes }">
                     <span v-bind="attributes">
                         &#9662;

@@ -21,7 +21,12 @@
                     <th>Название ресурсов</th>
                 </tr>
             </thead>
-            <draggable v-show="!loading" v-model="flat" tag="tbody" :move="moveRow" @change="dragRow" handle=".tasks__table__id">
+            <draggable v-show="!loading"
+                       v-model="flat"
+                       tag="tbody"
+                       :move="moveRow"
+                       @change="dragRow"
+                       handle=".tasks__table__id">
                 <template v-for="task in filterTasks">
                     <TaskRow :key="task.id"
                              :task="task"
