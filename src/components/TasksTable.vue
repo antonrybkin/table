@@ -54,6 +54,15 @@
                                                      class="tasks-table__row_lavel4"
                                                      :class="{ 'isOpen' : expanded[taskLavel4.id] }"
                                                      @expand="expand" />
+                                            <template v-if="taskLavel4.id in expanded && expanded[taskLavel4.id]">
+                                                <template v-for="(taskLavel5, index5) in taskLavel4.children">
+                                                    <TaskRow :key="`key3${index5}-${taskLavel5.id}`"
+                                                             :task="taskLavel5"
+                                                             class="tasks-table__row_lavel4"
+                                                             :class="{ 'isOpen' : expanded[taskLavel5.id] }"
+                                                             @expand="expand" />
+                                                </template>
+                                            </template>
                                         </template>
                                     </template>
                                 </template>
@@ -138,7 +147,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['changeCategory']),
+        ...mapActions(['dropRow']),
 
         // Вспомогательная функция, для поиска
         $_find(items, predicate) {
@@ -202,19 +211,10 @@ export default {
         // Подтверждение перемещения строки
         confirmDragRow() {
             this.modal.show = false; // Скрываем окно-подтверждение
-            let items = [this.drag.item]; // Добавляем перемещаемую задачу в пустой массив
-
-            // Добавляем в массив все дочерние задачи
-            function includeChildren(task) {
-                if(task.children.length > 0) {
-                    items.push(...task.children)
-                    task.children.forEach(t => includeChildren(t))
-                }
-            }
-            includeChildren(this.drag.item);
+            let item = this.drag.item; // Добавляем перемещаемую задачу в пустой массив
 
             // Запускаем действие (action) смены категории (id) для массива items
-            this.changeCategory({ id: this.drag.category.id, items });
+            this.dropRow({ id: this.drag.category.id, item });
         }
     },
     created() {
@@ -368,6 +368,11 @@ export default {
 
             &_lavel4 .tasks-table__name {
                 padding-left: 65px;
+                text-align: left;
+            }
+
+            &_lavel5 .tasks-table__name {
+                padding-left: 70px;
                 text-align: left;
             }
 

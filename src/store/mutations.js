@@ -133,6 +133,18 @@ export default {
     }
   },
 
+  DROP_ROW(state, { id, item }) {
+      const newItem = goClone(item);
+      newItem.removed = false;
+      newItem.checked = false;
+      if(id === "root") {
+        state.tasks.push(newItem)
+      } else {
+        let find = findById(state.tasks, id)
+        if(find !== undefined) find.children.push(newItem);
+      }
+  },
+
   clearCheckboxes(state) {
     deepLoop(state.tasks).forEach(task => task.checked = false);
     state.checkAll = false;

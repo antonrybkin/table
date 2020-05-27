@@ -50,4 +50,11 @@ export default {
         context.commit(`SET_CATEGORY`, { id, items })
         context.commit(`REMOVE_TASKS`, items)
     },
+
+    dropRow(context, { id, item }) {
+        // ЗДЕСЬ БУДЕТ ЗАПРОС НА СМЕНУ ВЛОЖЕННОСТИ
+        context.commit(`PRE_REMOVE_TASKS`, [item])
+        context.commit(`DROP_ROW`, { id, item })
+        context.commit(`REMOVE_TASKS`, [item])
+    },
 };
