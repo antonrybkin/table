@@ -58,7 +58,7 @@ export default {
 
         .checkmark:after {
             left: 4px;
-            top: 12px;
+            top: 2px;
             width: 3px;
             height: 6px;
             border: solid white;
