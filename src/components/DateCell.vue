@@ -1,17 +1,16 @@
 <template>
-    <td class="tasks__table__cell-wrapper">
-        <div class="tasks__table__date-picker">
+        <div class="date-picker">
             <v-date-picker v-if="editable"
                            :value="date"
                            :popover="{ visibility: 'click' }"
                            :disabled-dates="disabledDates"
                            @input="upDate"
                            locale="ru">
-                <div class="tasks__table__date-picker__block tasks__table__date-picker__block_editable">
+                <div class="date-picker__block date-picker__block_editable">
                     {{ date | moment("dd DD.MM.YY") }}
                 </div>
             </v-date-picker>
-            <div v-else class="tasks__table__date-picker__block">
+            <div v-else class="date-picker__block">
                 {{ date | moment("dd DD.MM.YY") }}
             </div>
         </div>
@@ -51,7 +50,7 @@ export default {
 </script>
 
 <style lang="scss">
-.tasks__table__date-picker {
+.date-picker {
     padding: 0;
 
     &__block {

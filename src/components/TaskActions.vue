@@ -1,18 +1,18 @@
 <template>
-    <div class="tasks__actions">
-        <div class="tasks__actions__clear" @click="$store.commit('clearCheckboxes')">
+    <div class="tasks-actions">
+        <div class="tasks-actions__clear" @click="$store.commit('clearCheckboxes')">
             <img src="@/assets/img/icons/close.svg" alt="">
         </div>
         <div>Выбрано: {{ items.length }}</div>
-        <div class="tasks__actions__remove" @click="remove">
+        <div class="tasks-actions__remove" @click="remove">
             <img src="@/assets/img/icons/remove.svg" alt="">
         </div>
-        <div class="tasks__actions__remove">
+        <div class="tasks-actions__remove">
             <img src="@/assets/img/icons/category.svg" alt="">
         </div>
         <v-select :options="taskNames"
                   v-model="selectedCategory"
-                  :clearable="false" class="tasks__actions__select">
+                  :clearable="false" class="tasks-actions__select">
             <template #open-indicator="{ attributes }">
                     <span v-bind="attributes">
                         &#9662;
@@ -20,7 +20,7 @@
             </template>
             <span slot="no-options">Не найдено</span>
         </v-select>
-        <button class="tasks__actions__btn" @click="setCategory">Установить</button>
+        <button class="tasks-actions__btn" @click="setCategory">Установить</button>
 
         <modal :show="modal.show"
                :msg="modal.msg"
@@ -88,7 +88,7 @@ export default {
 </script>
 
 <style lang="scss">
-.tasks__actions {
+.tasks-actions {
     display: flex;
     align-items: center;
     height: 40px;

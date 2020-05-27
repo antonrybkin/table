@@ -1,15 +1,15 @@
 <template>
     <div class="tasks">
-        <div class="tasks__search">
+        <div class="tasks-search">
             <label for="search">Поиск: </label>
-            <input name="search" type="text" id="search" v-model="search" class="tasks__search__input" />
+            <input name="search" type="text" id="search" v-model="search" class="tasks-search__input" />
         </div>
 
-        <table class="tasks__table">
+        <table class="tasks-table">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th class="tasks__table__checkbox">
+                    <th class="tasks-table__checkbox">
                         <Checkbox v-model="$store.state.checkAll" @input="$store.commit('checkAll')" />
                     </th>
                     <th>Название задачи</th>
@@ -26,32 +26,32 @@
                        tag="tbody"
                        :move="moveRow"
                        @change="dragRow"
-                       handle=".tasks__table__id">
+                       handle=".tasks-table__id">
                 <template v-for="task in filterTasks">
                     <TaskRow :key="task.id"
                              :task="task"
-                             class="tasks__table__lavel1"
+                             class="tasks-table__lavel1"
                              :class="{ 'isOpen' : expanded[task.id] }"
                              @expand="expand" />
                     <template v-if="task.id in expanded && expanded[task.id]">
                         <template v-for="(taskLavel2, index1) in task.children">
                             <TaskRow :key="`key1${index1}-${taskLavel2.id}`"
                                      :task="taskLavel2"
-                                     class="tasks__table__lavel2"
+                                     class="tasks-table__lavel2"
                                      :class="{ 'isOpen' : expanded[taskLavel2.id] }"
                                      @expand="expand" />
                             <template v-if="taskLavel2.id in expanded && expanded[taskLavel2.id]">
                                 <template v-for="(taskLavel3, index2) in taskLavel2.children">
                                     <TaskRow :key="`key2${index2}-${taskLavel3.id}`"
                                              :task="taskLavel3"
-                                             class="tasks__table__lavel3"
+                                             class="tasks-table__lavel3"
                                              :class="{ 'isOpen' : expanded[taskLavel3.id] }"
                                              @expand="expand" />
                                     <template v-if="taskLavel3.id in expanded && expanded[taskLavel3.id]">
                                         <template v-for="(taskLavel4, index3) in taskLavel3.children">
                                             <TaskRow :key="`key3${index3}-${taskLavel4.id}`"
                                                      :task="taskLavel4"
-                                                     class="tasks__table__lavel4"
+                                                     class="tasks-table__lavel4"
                                                      :class="{ 'isOpen' : expanded[taskLavel4.id] }"
                                                      @expand="expand" />
                                         </template>
@@ -63,7 +63,7 @@
                 </template>
             </draggable>
         </table>
-        <div v-if="filterTasks.length < 1" class="tasks__table__no-results">Нет задач.</div>
+        <div v-if="filterTasks.length < 1" class="tasks-table__no-results">Нет задач.</div>
         <TaskActions v-if="toActionArray.length" :items="toActionArray" />
 
         <modal :show="modal.show"
@@ -232,7 +232,7 @@ export default {
 
 <style lang="scss">
 .tasks {
-    &__search {
+    &-search {
         text-align: right;
         margin: 7px 0;
 
@@ -245,7 +245,7 @@ export default {
         }
     }
 
-    &__table {
+    &-table {
         width: 100%;
         border-collapse: collapse;
 
@@ -291,20 +291,16 @@ export default {
             }
         }
 
-        .tasks__table__checkbox {
+        .tasks-table__checkbox {
             padding: 0;
         }
 
-        .tasks__table__name {
+        .tasks-table__name {
             width: 443px;
             position: relative;
             box-sizing: border-box;
 
-            &__wrapper {
-                display: flex;
-            }
-
-            &__arrow {
+            &-arrow {
                 position: absolute;
                 display: block;
                 margin-left: -11px;
@@ -313,14 +309,14 @@ export default {
                 transition: all .15s;
             }
 
-            &__label {
+            &-label {
                 display: block;
                 width: 100%;
                 padding: 10px 0;
                 cursor: text;
             }
 
-            &__input {
+            &-input {
                 width: 100%;
                 height: 10px;
                 padding: 10px 0;
@@ -355,18 +351,18 @@ export default {
             font-weight: lighter;
         }
 
-        .tasks__table__order {
+        .tasks-table__order {
             padding: 0;
             width: 120px;
 
-            &__label {
+            &-label {
                 display: block;
                 padding: 10px;
                 width: 100px;
                 cursor: text;
             }
 
-            &__input {
+            &-input {
                 padding: 4px 8px;
                 width: 98px;
                 margin: 1px;
@@ -375,12 +371,12 @@ export default {
             }
         }
 
-        .tasks__table__select {
+        .tasks-table__select {
             padding: 0;
         }
 
         &__row_red {
-            .tasks__table__id-wrapper {
+            .tasks-table__id-wrapper {
                 position: relative;
 
                 &:before {
@@ -395,7 +391,7 @@ export default {
                 }
             }
 
-            .tasks__table__cell-wrapper {
+            .tasks-table__cell-wrapper {
                 border-width: 0;
                 border-spacing: 0;
                 border-right: 1px solid #F84932;
@@ -404,7 +400,7 @@ export default {
                 position: relative;
             }
 
-            .tasks__table__date-picker, .tasks__table__select {
+            .tasks-table__select, .date-picker {
                 border-right: 1px solid #F84932;
                 border-bottom: 1px solid #F84932;
                 height: 35px;
@@ -434,7 +430,7 @@ export default {
     }
 }
 
-.isOpen .tasks__table__name__arrow {
+.isOpen .tasks-table__name-arrow {
     transform: rotate(90deg);
     border-color: transparent #545C6A;
     path {

@@ -1,12 +1,12 @@
 <template>
-    <tr :class="{ 'tasks__table__row_white' : task.children.length < 1, 'tasks__table__row_red' : task.redMark }">
-        <th class="tasks__table__id"><div class="tasks__table__id-wrapper">{{ task.id }}</div></th>
+    <tr :class="{ 'tasks-table__row_white' : task.children.length < 1, 'tasks-table__row_red' : task.redMark }">
+        <th class="tasks-table__id"><div class="tasks-table__id-wrapper">{{ task.id }}</div></th>
         <td>
             <Checkbox v-model="value" />
         </td>
         <td>
-            <div class="tasks__table__name">
-                <div class="tasks__table__name__arrow" @click="$emit('expand', task.id)">
+            <div class="tasks-table__name">
+                <div class="tasks-table__name-arrow" @click="$emit('expand', task.id)">
                     <svg
                       v-if="task.children && task.children.length"
                       alt="развернуть"
@@ -21,23 +21,27 @@
 
                 <label v-show="!editName"
                            @click="changeName"
-                           class="tasks__table__name__label">{{ task.name }}</label>
+                           class="tasks-table__name-label">{{ task.name }}</label>
                     <input v-show="editName"
                            ref="inputName"
                            type="text"
                            v-model="inputName"
                            v-on:blur="saveName(task.id)"
                            @keyup.enter="saveName(task.id)"
-                           class="tasks__table__name__input">
+                           class="tasks-table__name-input">
             </div>
         </td>
-        <td><div class="tasks__table__padding-cell">{{ task.duration }} дней</div></td>
-        <DateCell :value="task.start" :editable="!task.children.length" @update="updateStart" />
-        <DateCell :value="task.end" :from="task.start" :editable="!task.children.length" @update="updateEnd" />
-        <td class="tasks__table__order">
+        <td><div class="tasks-table__padding-cell">{{ task.duration }} дней</div></td>
+        <td class="tasks-table__cell-wrapper">
+            <DateCell :value="task.start" :editable="!task.children.length" @update="updateStart" />
+        </td>
+        <td class="tasks-table__cell-wrapper">
+            <DateCell :value="task.end" :from="task.start" :editable="!task.children.length" @update="updateEnd" />
+        </td>
+        <td class="tasks-table__order">
                 <label v-show="!editOrder"
                        @click="changeOrder"
-                       class="tasks__table__order__label">{{ task.order }}</label>
+                       class="tasks-table__order-label">{{ task.order }}</label>
                 <input v-show="editOrder"
                        ref="inputOrder"
                        type="number"
@@ -45,11 +49,11 @@
                        v-on:blur="saveOrder(task.id)"
                        @keypress="onlyNumber"
                        @keyup.enter="saveOrder(task.id)"
-                       class="tasks__table__order__input">
+                       class="tasks-table__order-input">
         </td>
-        <td><div class="tasks__table__padding-cell">{{ task.hours }} ч</div></td>
-        <td class="tasks__table__cell-wrapper">
-            <div class="tasks__table__select">
+        <td><div class="tasks-table__padding-cell">{{ task.hours }} ч</div></td>
+        <td class="tasks-table__cell-wrapper">
+            <div class="tasks-table__select">
                 <v-select v-if="!task.children || task.children.length < 1"
                           @input="newResource => putResourse(task.id, newResource)"
                           :options="$store.state.resources"
