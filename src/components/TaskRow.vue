@@ -1,5 +1,6 @@
 <template>
-    <tr :class="{ 'tasks-table__row_white' : task.children.length < 1, 'tasks-table__row_red' : task.redMark }">
+    <tr class="tasks-table__row"
+        :class="{ 'tasks-table__row_white' : task.children.length < 1, 'tasks-table__row_red' : task.redMark }">
         <th class="tasks-table__id"><div class="tasks-table__id-wrapper">{{ task.id }}</div></th>
         <td>
             <Checkbox v-model="value" />

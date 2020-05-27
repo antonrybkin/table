@@ -17,6 +17,7 @@ function findById(data, id) {
   return result
 }
 
+// Клонируем объект для его перемещения (копирования, модификации, удаления оригинала)
 function goClone(source) {
   if (Object.prototype.toString.call(source) === '[object Array]') {
     var clone = [];
