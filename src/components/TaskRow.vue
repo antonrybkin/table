@@ -33,10 +33,10 @@
         </td>
         <td><div class="tasks-table__padding-cell">{{ task.duration }} дней</div></td>
         <td class="tasks-table__cell-wrapper">
-            <DateCell :value="task.start" :editable="!task.children.length" @update="updateStart" />
+            <DatePicker :value="task.start" :editable="!task.children.length" @update="updateStart" />
         </td>
         <td class="tasks-table__cell-wrapper">
-            <DateCell :value="task.end" :from="task.start" :editable="!task.children.length" @update="updateEnd" />
+            <DatePicker :value="task.end" :from="task.start" :editable="!task.children.length" @update="updateEnd" />
         </td>
         <td class="tasks-table__order">
                 <label v-show="!editOrder"
@@ -73,12 +73,12 @@
 
 <script>
 import { mapActions } from 'vuex';
-import DateCell from '@/components/DateCell';
+import DatePicker from '@/components/DatePicker';
 import Checkbox from '@/components/Checkbox';
 
 export default {
     name: "TaskRow",
-    components: { DateCell, Checkbox },
+    components: { DatePicker, Checkbox },
     props: {
         task: Object
     },

@@ -37,22 +37,22 @@ export default {
 </script>
 
 <style lang="scss">
-.modal{
-    &__mask {
-        position: fixed;
-        z-index: 9998;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: table;
-        transition: opacity 0.3s ease;
-    }
+.modal {
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: table;
+    transition: opacity 0.3s ease;
+
     &__wrapper {
         display: table-cell;
         vertical-align: middle;
     }
+
     &__container {
         width: 300px;
         margin: 0px auto;
@@ -64,12 +64,15 @@ export default {
         font-family: Helvetica, Arial, sans-serif;
         overflow: hidden;
     }
+
     &__body {
         margin: 20px 0;
     }
+
     &__default-button {
         float: right;
     }
+
     &-enter {
         opacity: 0;
         .modal-container {
@@ -77,6 +80,7 @@ export default {
             transform: scale(1.1);
         }
     }
+
     &-leave-active {
         opacity: 0;
         .modal-container {
@@ -84,6 +88,7 @@ export default {
             transform: scale(1.1);
         }
     }
+
     &__footer {
         button {
             margin-left: 10px;
