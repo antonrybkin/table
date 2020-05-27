@@ -1,14 +1,14 @@
 <template>
     <transition name="modal">
-        <div class="modal-mask" v-if="show">
-            <div class="modal-wrapper">
-                <div class="modal-container">
-                    <div class="modal-body">
+        <div class="modal__mask" v-if="show">
+            <div class="modal__wrapper">
+                <div class="modal__container">
+                    <div class="modal__body">
                         <slot></slot>
                     </div>
-                    <div class="modal-footer">
-                        <button v-if="btnNo" class="modal-default-button" @click="$emit('close')">Нет</button>
-                        <button v-if="btnYes" class="modal-default-button" @click="$emit('confirm')">Да</button>
+                    <div class="modal__footer">
+                        <button v-if="btnNo" class="modal__default-button" @click="$emit('close')">Нет</button>
+                        <button v-if="btnYes" class="modal__default-button" @click="$emit('confirm')">Да</button>
                     </div>
                 </div>
             </div>
@@ -38,7 +38,7 @@ export default {
 
 <style lang="scss">
 .modal{
-    &-mask {
+    &__mask {
         position: fixed;
         z-index: 9998;
         top: 0;
@@ -49,11 +49,11 @@ export default {
         display: table;
         transition: opacity 0.3s ease;
     }
-    &-wrapper {
+    &__wrapper {
         display: table-cell;
         vertical-align: middle;
     }
-    &-container {
+    &__container {
         width: 300px;
         margin: 0px auto;
         padding: 20px 30px;
@@ -64,10 +64,10 @@ export default {
         font-family: Helvetica, Arial, sans-serif;
         overflow: hidden;
     }
-    &-body {
+    &__body {
         margin: 20px 0;
     }
-    &-default-button {
+    &__default-button {
         float: right;
     }
     &-enter {
@@ -84,7 +84,7 @@ export default {
             transform: scale(1.1);
         }
     }
-    &-footer {
+    &__footer {
         button {
             margin-left: 10px;
         }

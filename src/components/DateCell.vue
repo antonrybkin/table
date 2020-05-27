@@ -1,14 +1,18 @@
 <template>
-    <td class="tasks-table__date-picker">
+    <td class="tasks__table__date-picker">
         <v-date-picker v-if="editable"
                        :value="date"
                        :popover="{ visibility: 'click' }"
                        :disabled-dates="disabledDates"
                        @input="upDate"
                        locale="ru">
-            <div class="tasks-table__date-picker_block">{{ date | moment("dd DD.MM.YY") }}</div>
+            <div class="tasks__table__date-picker__block tasks__table__date-picker__block_editable">
+                {{ date | moment("dd DD.MM.YY") }}
+            </div>
         </v-date-picker>
-        <div v-else>{{ date | moment("dd DD.MM.YY") }}</div>
+        <div v-else class="tasks__table__date-picker__block">
+            {{ date | moment("dd DD.MM.YY") }}
+        </div>
     </td>
 </template>
 
@@ -43,3 +47,17 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+.tasks__table__date-picker {
+    padding: 0;
+
+    &__block {
+        padding: 10px;
+
+        &_editable {
+            cursor: pointer;
+        }
+    }
+}
+</style>

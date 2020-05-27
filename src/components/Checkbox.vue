@@ -1,10 +1,12 @@
 <template>
-    <label class="tasks-table__checkbox-label">
-        <input type="checkbox"
-               :checked="value"
-               @change="$emit('input', $event.target.checked)"/>
-        <span class="checkmark"></span>
-    </label>
+    <div class="checkbox">
+        <label class="checkbox__label">
+            <input type="checkbox"
+                   :checked="value"
+                   @change="$emit('input', $event.target.checked)"/>
+            <span class="checkmark"></span>
+        </label>
+    </div>
 </template>
 
 <script>
@@ -20,12 +22,12 @@ export default {
 </script>
 
 <style lang="scss">
-.tasks-table__checkbox {
-    padding: 0 5px;
+.checkbox {
+    padding: 0 4px;
     width: 20px;
     position: relative;
 
-    &-label {
+    &__label {
         display: block;
         position: relative;
         padding-left: 20px;
@@ -56,7 +58,7 @@ export default {
 
         .checkmark:after {
             left: 4px;
-            top: 2px;
+            top: 12px;
             width: 3px;
             height: 6px;
             border: solid white;
