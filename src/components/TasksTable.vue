@@ -30,28 +30,28 @@
                 <template v-for="task in filterTasks">
                     <TaskRow :key="task.id"
                              :task="task"
-                             class="tasks-table__lavel1"
+                             class="tasks-table__row_lavel1"
                              :class="{ 'isOpen' : expanded[task.id] }"
                              @expand="expand" />
                     <template v-if="task.id in expanded && expanded[task.id]">
                         <template v-for="(taskLavel2, index1) in task.children">
                             <TaskRow :key="`key1${index1}-${taskLavel2.id}`"
                                      :task="taskLavel2"
-                                     class="tasks-table__lavel2"
+                                     class="tasks-table__row_lavel2"
                                      :class="{ 'isOpen' : expanded[taskLavel2.id] }"
                                      @expand="expand" />
                             <template v-if="taskLavel2.id in expanded && expanded[taskLavel2.id]">
                                 <template v-for="(taskLavel3, index2) in taskLavel2.children">
                                     <TaskRow :key="`key2${index2}-${taskLavel3.id}`"
                                              :task="taskLavel3"
-                                             class="tasks-table__lavel3"
+                                             class="tasks-table__row_lavel3"
                                              :class="{ 'isOpen' : expanded[taskLavel3.id] }"
                                              @expand="expand" />
                                     <template v-if="taskLavel3.id in expanded && expanded[taskLavel3.id]">
                                         <template v-for="(taskLavel4, index3) in taskLavel3.children">
                                             <TaskRow :key="`key3${index3}-${taskLavel4.id}`"
                                                      :task="taskLavel4"
-                                                     class="tasks-table__lavel4"
+                                                     class="tasks-table__row_lavel4"
                                                      :class="{ 'isOpen' : expanded[taskLavel4.id] }"
                                                      @expand="expand" />
                                         </template>
@@ -303,8 +303,8 @@ export default {
             &-arrow {
                 position: absolute;
                 display: block;
-                margin-left: -11px;
-                margin-top: 9px;
+                margin-left: -20px;
+                padding: 9px;
                 cursor: pointer;
                 transition: all .15s;
             }
@@ -326,29 +326,8 @@ export default {
             }
         }
 
-        &__lavel1 &__name {
-            padding-left: 30px;
-            text-align: left;
-        }
-
-        &__lavel2 &__name {
-            padding-left: 50px;
-            text-align: left;
-        }
-
-        &__lavel3 &__name {
-            padding-left: 60px;
-            text-align: left;
-        }
-
-        &__lavel4 &__name {
-            padding-left: 65px;
-            text-align: left;
-        }
-
-        &__row_white td {
-            background: #fff;
-            font-weight: lighter;
+        .tasks-table__select {
+            padding: 0;
         }
 
         .tasks-table__order {
@@ -371,59 +350,82 @@ export default {
             }
         }
 
-        .tasks-table__select {
-            padding: 0;
-        }
-
-        &__row_red {
-            .tasks-table__id-wrapper {
-                position: relative;
-
-                &:before {
-                    content: "";
-                    position: absolute;
-                    background: #F84932;
-                    width: 4px;
-                    height: 4px;
-                    left: 3px;
-                    top: 16px;
-                    border-radius: 3px;
-                }
+        &__row {
+            &_lavel1 .tasks-table__name {
+                padding-left: 30px;
+                text-align: left;
             }
 
-            .tasks-table__cell-wrapper {
-                border-width: 0;
-                border-spacing: 0;
-                border-right: 1px solid #F84932;
-                border-top: 1px solid #F84932;
-                height: 33px;
-                position: relative;
+            &_lavel2 .tasks-table__name {
+                padding-left: 50px;
+                text-align: left;
             }
 
-            .tasks-table__select, .date-picker {
-                border-right: 1px solid #F84932;
-                border-bottom: 1px solid #F84932;
-                height: 35px;
-                position: relative;
+            &_lavel3 .tasks-table__name {
+                padding-left: 60px;
+                text-align: left;
+            }
 
-                &:before {
-                    content: "";
-                    position: absolute;
-                    background: #F84932;
-                    width: 1px;
-                    height: calc(100% + 2px);
-                    left: -1px;
-                    top: -1px;
+            &_lavel4 .tasks-table__name {
+                padding-left: 65px;
+                text-align: left;
+            }
+
+            &_white td {
+                background: #fff;
+                font-weight: lighter;
+            }
+
+            &_red {
+                .tasks-table__id-wrapper {
+                    position: relative;
+
+                    &:before {
+                        content: "";
+                        position: absolute;
+                        background: #F84932;
+                        width: 4px;
+                        height: 4px;
+                        left: 3px;
+                        top: 16px;
+                        border-radius: 3px;
+                    }
                 }
 
-                &:after {
-                    content: "";
-                    position: absolute;
-                    background: #F84932;
-                    width: calc(100% + 2px);
-                    height: 1px;
-                    left: -1px;
-                    top: -1px;
+                .tasks-table__cell-wrapper {
+                    border-width: 0;
+                    border-spacing: 0;
+                    border-right: 1px solid #F84932;
+                    border-top: 1px solid #F84932;
+                    height: 33px;
+                    position: relative;
+                }
+
+                .tasks-table__select, .date-picker {
+                    border-right: 1px solid #F84932;
+                    border-bottom: 1px solid #F84932;
+                    height: 35px;
+                    position: relative;
+
+                    &:before {
+                        content: "";
+                        position: absolute;
+                        background: #F84932;
+                        width: 1px;
+                        height: calc(100% + 2px);
+                        left: -1px;
+                        top: -1px;
+                    }
+
+                    &:after {
+                        content: "";
+                        position: absolute;
+                        background: #F84932;
+                        width: calc(100% + 2px);
+                        height: 1px;
+                        left: -1px;
+                        top: -1px;
+                    }
                 }
             }
         }
