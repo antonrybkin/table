@@ -24,7 +24,7 @@ export default {
 <style lang="scss">
 .checkbox {
     padding: 0 4px;
-    width: 20px;
+    width: 22px;
     position: relative;
 
     &__label {
