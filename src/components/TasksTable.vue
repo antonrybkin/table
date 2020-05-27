@@ -279,13 +279,13 @@ export default {
         }
 
         &__id {
-            padding: 10px;
             background: #F0F0F0;
             width: 45px;
             min-width: 45px;
             cursor: move;
 
-            div {
+            &-wrapper {
+                padding: 10px;
                 text-align: left;
                 color: #717A84;
             }
@@ -296,7 +296,7 @@ export default {
         }
 
         .tasks__table__name {
-            width: 445px;
+            width: 443px;
             position: relative;
             box-sizing: border-box;
 
@@ -380,7 +380,7 @@ export default {
         }
 
         &__row_red {
-            .tasks__table__id {
+            .tasks__table__id-wrapper {
                 position: relative;
 
                 &:before {
@@ -395,17 +395,28 @@ export default {
                 }
             }
 
+            .tasks__table__cell-wrapper {
+                border-width: 0;
+                border-spacing: 0;
+                border-right: 1px solid #F84932;
+                border-top: 1px solid #F84932;
+                height: 33px;
+                position: relative;
+            }
+
             .tasks__table__date-picker, .tasks__table__select {
-                border: 2px solid #F84932;
+                border-right: 1px solid #F84932;
+                border-bottom: 1px solid #F84932;
+                height: 35px;
                 position: relative;
 
                 &:before {
                     content: "";
                     position: absolute;
                     background: #F84932;
-                    width: 2px;
+                    width: 1px;
                     height: calc(100% + 2px);
-                    left: -2px;
+                    left: -1px;
                     top: 0;
                 }
 
@@ -413,9 +424,9 @@ export default {
                     content: "";
                     position: absolute;
                     background: #F84932;
-                    width: calc(100% + 4px);
-                    height: 2px;
-                    left: -2px;
+                    width: calc(100% + 2px);
+                    height: 1px;
+                    left: -1px;
                     top: -1px;
                 }
             }

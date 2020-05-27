@@ -1,6 +1,6 @@
 <template>
     <tr :class="{ 'tasks__table__row_white' : task.children.length < 1, 'tasks__table__row_red' : task.redMark }">
-        <th class="tasks__table__id"><div>{{ task.id }}</div></th>
+        <th class="tasks__table__id"><div class="tasks__table__id-wrapper">{{ task.id }}</div></th>
         <td>
             <Checkbox v-model="value" />
         </td>
@@ -48,19 +48,21 @@
                        class="tasks__table__order__input">
         </td>
         <td><div class="tasks__table__padding-cell">{{ task.hours }} ч</div></td>
-        <td class="tasks__table__select">
-            <v-select v-if="!task.children || task.children.length < 1"
-                      @input="newResource => putResourse(task.id, newResource)"
-                      :options="$store.state.resources"
-                      :value="task.resource"
-                      :clearable="false">
-                <template #open-indicator="{ attributes }">
-                    <span v-bind="attributes">
-                        <img src="@/assets/img/icons/arrow_down.svg" alt="">
-                    </span>
-                </template>
-                <span slot="no-options">Нет таких ресурсов</span>
-            </v-select>
+        <td class="tasks__table__cell-wrapper">
+            <div class="tasks__table__select">
+                <v-select v-if="!task.children || task.children.length < 1"
+                          @input="newResource => putResourse(task.id, newResource)"
+                          :options="$store.state.resources"
+                          :value="task.resource"
+                          :clearable="false">
+                    <template #open-indicator="{ attributes }">
+                        <span v-bind="attributes">
+                            <img src="@/assets/img/icons/arrow_down.svg" alt="">
+                        </span>
+                    </template>
+                    <span slot="no-options">Нет таких ресурсов</span>
+                </v-select>
+            </div>
         </td>
     </tr>
 </template>
