@@ -80,7 +80,7 @@
                btnNo
                @confirm="confirmDragRow"
                @close="modal.show = false">
-            Переметить задачу <b>{{ drag.item.name }}</b> с подзадачами в категорию <b>{{ drag.category.name }}</b>?
+            Переметить задачу <b>{{ drag.item.name }}</b> с подзадачами в категорию <b>{{ drag.relatedContext.name }}</b>?
         </modal>
     </div>
 </template>
@@ -104,10 +104,6 @@ export default {
             loading: true,
             drag: {
                 relatedContext: {
-                    id: null,
-                    name: '',
-                },
-                category: {
                     id: null,
                     name: '',
                 },
@@ -183,28 +179,18 @@ export default {
 
         // Следим за перемещеием строк
         moveRow(value) {
-            this.drag.relatedContext.id = value.originalEvent.target.textContent;
+            this.drag.relatedContext = this.flat.find(task => task.id.toString() === value.originalEvent.target.textContent);
             this.drag.item = this.flat.find(task => task.id.toString() === value.dragged.cells[0].textContent);
         },
 
         // Обработчик перемещения строки
         dragRow(event) {
+            console.log(this.drag.relatedContext.id);
             const childrenIds = this.drag.item.children.length > 0 ? this.drag.item.children.map(task => task.id) : null;
             // Запрещаем перемещать задачу в саму себя и в свои дочерние задачи следующей проверкой:
             if((this.drag.relatedContext.id !== this.drag.item.id.toString())
                 && (childrenIds === null || !(childrenIds.includes(Number(this.drag.relatedContext.id))))) {
                 this.modal.show = true; // Показываем окно-подтверждение
-                // Ищем и запоминаем родителя
-                this.flat.forEach(task => {
-                    if(task.children.length > 0) {
-                        if(task.children.some(t => t.id.toString() === this.drag.relatedContext.id)) {
-                            this.drag.category = task;
-                        }
-                    }
-                })
-
-                // Если родитель не нашёлся, то это корневая категория
-                if(this.drag.category.name === "") this.drag.category = { name: "Корень", id: "root" };
             }
         },
 
@@ -214,7 +200,7 @@ export default {
             let item = this.drag.item; // Добавляем перемещаемую задачу в пустой массив
 
             // Запускаем действие (action) смены категории (id) для массива items
-            this.dropRow({ id: this.drag.category.id, item });
+            this.dropRow({ id: this.drag.relatedContext.id, item });
         }
     },
     created() {
