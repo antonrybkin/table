@@ -180,12 +180,13 @@ export default {
         // Следим за перемещеием строк
         moveRow(value) {
             this.drag.relatedContext = this.flat.find(task => task.id.toString() === value.originalEvent.target.textContent);
+            if(this.drag.relatedContext === undefined) this.drag.relatedContext = { name: "Корень", id: "root" };
+            console.log(this.drag.relatedContext);
             this.drag.item = this.flat.find(task => task.id.toString() === value.dragged.cells[0].textContent);
         },
 
         // Обработчик перемещения строки
         dragRow(event) {
-            console.log(this.drag.relatedContext.id);
             const childrenIds = this.drag.item.children.length > 0 ? this.drag.item.children.map(task => task.id) : null;
             // Запрещаем перемещать задачу в саму себя и в свои дочерние задачи следующей проверкой:
             if((this.drag.relatedContext.id !== this.drag.item.id.toString())
