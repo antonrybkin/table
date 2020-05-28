@@ -179,9 +179,8 @@ export default {
 
         // Следим за перемещеием строк
         moveRow(value) {
-            this.drag.relatedContext = this.flat.find(task => task.id.toString() === value.originalEvent.target.textContent);
+            this.drag.relatedContext = this.flat.find(task => task.id.toString() === value.originalEvent.target.parentElement.children[0].textContent);
             if(this.drag.relatedContext === undefined) this.drag.relatedContext = { name: "Корень", id: "root" };
-            console.log(this.drag.relatedContext);
             this.drag.item = this.flat.find(task => task.id.toString() === value.dragged.cells[0].textContent);
         },
 
