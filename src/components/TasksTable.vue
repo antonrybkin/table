@@ -24,6 +24,7 @@
             <draggable v-show="!loading"
                        v-model="flat"
                        tag="tbody"
+                       ghost-class="tasks-table__row_ghost"
                        :move="moveRow"
                        @change="dragRow"
                        handle=".tasks-table__id">
@@ -80,7 +81,7 @@
                btnNo
                @confirm="confirmDragRow"
                @close="modal.show = false">
-            Переметить задачу <b>{{ drag.item.name }}</b> с подзадачами в категорию <b>{{ drag.relatedContext.name }}</b>?
+            Переметить задачу <b>{{ drag.item.name }}</b> с подзадачами в категорию <b>{{ drag.newParent.name }}</b>?
         </modal>
     </div>
 </template>
@@ -103,14 +104,15 @@ export default {
             expanded: [],
             loading: true,
             drag: {
-                relatedContext: {
-                    id: null,
-                    name: '',
+                newParent: {
+                    id: "root",
+                    name: "Корень",
                 },
                 item: {
                     id: null,
                     name: '',
-                }
+                },
+                parentNode: null
             },
             modal: {
                 show: false,
@@ -179,17 +181,30 @@ export default {
 
         // Следим за перемещеием строк
         moveRow(value) {
-            this.drag.relatedContext = this.flat.find(task => task.id.toString() === value.originalEvent.target.parentElement.children[0].textContent);
-            if(this.drag.relatedContext === undefined) this.drag.relatedContext = { name: "Корень", id: "root" };
-            this.drag.item = this.flat.find(task => task.id.toString() === value.dragged.cells[0].textContent);
+            // В этом блоке кода находим нового родителя
+            const index = value.draggedContext.index;
+            const futureIndex = value.draggedContext.futureIndex;
+            this.parentNode = value.originalEvent === undefined ? this.parentNode : value.originalEvent.target.parentNode
+            if(this.parentNode !== null && this.parentNode !== '' && this.parentNode.firstChild !== null) {
+                // ID задачи, в которую дропаем, вычисляется 2мя путями: при перемещении в верх и вниз, иначе получится не корректно
+                const parentId = (index > futureIndex) && (this.parentNode.previousElementSibling !== null) ?
+                    this.parentNode.previousElementSibling.firstChild.textContent :
+                    this.parentNode.firstChild.textContent;
+                const newParent = this.flat.find(task => task.id === parseInt(parentId));
+                this.drag.newParent = newParent === undefined ? this.drag.newParent : newParent;
+                //this.expand(this.drag.newParent.id);
+
+                // В этом блоке кода находим перенаскиваемый элемент
+                this.drag.item = this.flat.find(task => task.id.toString() === value.dragged.cells[0].textContent);
+            }
         },
 
         // Обработчик перемещения строки
         dragRow(event) {
             const childrenIds = this.drag.item.children.length > 0 ? this.drag.item.children.map(task => task.id) : null;
             // Запрещаем перемещать задачу в саму себя и в свои дочерние задачи следующей проверкой:
-            if((this.drag.relatedContext.id !== this.drag.item.id.toString())
-                && (childrenIds === null || !(childrenIds.includes(Number(this.drag.relatedContext.id))))) {
+            if((this.drag.newParent.id !== this.drag.item.id.toString())
+                && (childrenIds === null || !(childrenIds.includes(Number(this.drag.newParent.id))))) {
                 this.modal.show = true; // Показываем окно-подтверждение
             }
         },
@@ -200,7 +215,19 @@ export default {
             let item = this.drag.item; // Добавляем перемещаемую задачу в пустой массив
 
             // Запускаем действие (action) смены категории (id) для массива items
-            this.dropRow({ id: this.drag.relatedContext.id, item });
+            this.dropRow({ id: this.drag.newParent.id, item });
+
+            // Ищем и открываем родителя
+            this.flat.forEach(task => {
+                if(task.children.length > 0) {
+                    const dropedItem = task.children.find(t => t.id === this.drag.item.id)
+                    if(dropedItem !== undefined) {
+                        this.$set(this.expanded, task.id, true);
+                        dropedItem.dropped = true
+                        setTimeout(() => dropedItem.dropped = false, 100)
+                    }
+                }
+            })
         }
     },
     created() {
@@ -245,6 +272,7 @@ export default {
             text-align: left;
             font-weight: bold;
             white-space: nowrap;
+            transition: all 1s;
         }
 
         td {
@@ -360,6 +388,16 @@ export default {
             &_lavel5 .tasks-table__name {
                 padding-left: 70px;
                 text-align: left;
+            }
+
+            &_dropped {
+                td, th {
+                    opacity: 0.3;
+                }
+            }
+
+            &_ghost {
+                opacity: 0.3;
             }
 
             &_white td {

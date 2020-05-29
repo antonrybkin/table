@@ -20,6 +20,7 @@ export default function setCategoryDates(tasks) {
                 task.hours = task.duration * 8
             }
             task.duration = dateDiffInDays(new Date(task.start), new Date(task.end));
+            task.dropped = task.dropped || false;
         })
     }
     round(tasks)

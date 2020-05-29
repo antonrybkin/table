@@ -1,5 +1,4 @@
 // https://vuex.vuejs.org/en/mutations.html
-import Vue from 'vue'
 import deepLoop from "@/helpers/deep-loop"
 import setCategoryDates from "@/helpers/set-category-dates";
 
