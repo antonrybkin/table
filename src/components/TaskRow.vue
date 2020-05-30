@@ -174,22 +174,8 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style>
 div.vs__dropdown-toggle {
     border: 0;
-}
-.v-select {
-    .vs__selected-options {
-        margin-top: -5px;
-    }
-
-    :not(.vs--open) .vs__search {
-        position: absolute;
-    }
-
-    .vs__actions {
-        padding: 0px 8px 0 0px;
-        font-size: 3px;
-    }
 }
 </style>

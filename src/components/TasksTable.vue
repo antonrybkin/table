@@ -331,8 +331,19 @@ export default {
             }
         }
 
-        .tasks-table__select {
+        &__select {
             padding: 0;
+
+            .v-select {
+                .vs__selected-options {
+                    margin-top: -5px;
+                }
+
+                .vs__actions {
+                    padding: 0px 8px 0 0px;
+                    font-size: 3px;
+                }
+            }
         }
 
         .tasks-table__order {
@@ -471,7 +482,6 @@ export default {
 .fade-leave-active {
     transition: opacity .15s
 }
-
 .fade-enter,
 .fade-leave-to {
     opacity: 0;
