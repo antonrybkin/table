@@ -3,7 +3,8 @@
         :class="{
             'tasks-table__row_white' : task.children.length < 1,
             'tasks-table__row_red' : task.redMark,
-            'tasks-table__row_dropped' : task.dropped
+            'tasks-table__row_dropped' : task.dropped,
+            'tasks-table__row_new-parent' : task.newParent
     }">
         <th class="tasks-table__id"><div class="tasks-table__id-wrapper">{{ task.id }}</div></th>
         <td>
@@ -179,11 +180,16 @@ div.vs__dropdown-toggle {
 }
 .v-select {
     .vs__selected-options {
-        margin-top: 5px;
+        margin-top: -5px;
     }
 
     :not(.vs--open) .vs__search {
         position: absolute;
+    }
+
+    .vs__actions {
+        padding: 0px 8px 0 0px;
+        font-size: 3px;
     }
 }
 </style>

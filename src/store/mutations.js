@@ -144,6 +144,14 @@ export default {
       }
   },
 
+  markNewParent(state, id) {
+    findById(state.tasks, id).newParent = true
+  },
+
+  unMarkNewParent(state) {
+    deepLoop(state.tasks).forEach(task => task.newParent = false);
+  },
+
   clearCheckboxes(state) {
     deepLoop(state.tasks).forEach(task => task.checked = false);
     state.checkAll = false;

@@ -75,14 +75,6 @@
         </table>
         <div v-if="filterTasks.length < 1" class="tasks-table__no-results">Нет задач.</div>
         <TaskActions v-if="toActionArray.length" :items="toActionArray" />
-
-        <modal :show="modal.show"
-               btnYes
-               btnNo
-               @confirm="confirmDragRow"
-               @close="modal.show = false">
-            Переметить задачу <b>{{ drag.item.name }}</b> с подзадачами в категорию <b>{{ drag.newParent.name }}</b>?
-        </modal>
     </div>
 </template>
 
@@ -113,9 +105,6 @@ export default {
                     name: '',
                 },
                 parentNode: null
-            },
-            modal: {
-                show: false,
             },
         }
     },
@@ -191,43 +180,44 @@ export default {
                     this.parentNode.previousElementSibling.firstChild.textContent :
                     this.parentNode.firstChild.textContent;
                 const newParent = this.flat.find(task => task.id === parseInt(parentId));
-                this.drag.newParent = newParent === undefined ? this.drag.newParent : newParent;
                 //this.expand(this.drag.newParent.id);
+                if(newParent !== undefined) {
+                    this.$store.commit('unMarkNewParent'); // Убираем выделение СТАРОГО родителя
+                    this.drag.newParent = newParent;
+                    this.$store.commit('markNewParent', newParent.id); // Добавляем выделение НОВОГО родителя
+                }
 
                 // В этом блоке кода находим перенаскиваемый элемент
                 this.drag.item = this.flat.find(task => task.id.toString() === value.dragged.cells[0].textContent);
             }
         },
 
-        // Обработчик перемещения строки
+        // Дроп строки
         dragRow(event) {
+            this.$store.commit('unMarkNewParent'); // Убираем выделение нового родителя
             const childrenIds = this.drag.item.children.length > 0 ? this.drag.item.children.map(task => task.id) : null;
             // Запрещаем перемещать задачу в саму себя и в свои дочерние задачи следующей проверкой:
             if((this.drag.newParent.id !== this.drag.item.id.toString())
                 && (childrenIds === null || !(childrenIds.includes(Number(this.drag.newParent.id))))) {
-                this.modal.show = true; // Показываем окно-подтверждение
-            }
-        },
+                // this.modal.show = true; // Показываем окно-подтверждение
+                // this.modal.show = false; // Скрываем окно-подтверждение
+                let item = this.drag.item; // Добавляем перемещаемую задачу в пустой массив
 
-        // Подтверждение перемещения строки
-        confirmDragRow() {
-            this.modal.show = false; // Скрываем окно-подтверждение
-            let item = this.drag.item; // Добавляем перемещаемую задачу в пустой массив
+                // Запускаем действие (action) смены категории (id) для массива items
+                this.dropRow({ id: this.drag.newParent.id, item });
 
-            // Запускаем действие (action) смены категории (id) для массива items
-            this.dropRow({ id: this.drag.newParent.id, item });
-
-            // Ищем и открываем родителя
-            this.flat.forEach(task => {
-                if(task.children.length > 0) {
-                    const dropedItem = task.children.find(t => t.id === this.drag.item.id)
-                    if(dropedItem !== undefined) {
-                        this.$set(this.expanded, task.id, true);
-                        dropedItem.dropped = true
-                        setTimeout(() => dropedItem.dropped = false, 100)
+                // Ищем и открываем родителя
+                this.flat.forEach(task => {
+                    if(task.children.length > 0) {
+                        const dropedItem = task.children.find(t => t.id === this.drag.item.id)
+                        if(dropedItem !== undefined) {
+                            this.$set(this.expanded, task.id, true);
+                            dropedItem.dropped = true
+                            setTimeout(() => dropedItem.dropped = false, 100)
+                        }
                     }
-                }
-            })
+                })
+            }
         }
     },
     created() {
@@ -306,6 +296,7 @@ export default {
         }
 
         .tasks-table__checkbox {
+            width: 30px;
             padding: 0;
         }
 
@@ -365,6 +356,8 @@ export default {
         }
 
         &__row {
+            transition: all 1s;
+
             &_lavel1 .tasks-table__name {
                 padding-left: 30px;
                 text-align: left;
@@ -390,14 +383,14 @@ export default {
                 text-align: left;
             }
 
-            &_dropped {
-                td, th {
-                    opacity: 0.3;
-                }
+            &_dropped, &_ghost {
+                opacity: 0.3;
             }
 
-            &_ghost {
-                opacity: 0.3;
+            &_new-parent, &_new-parent.tasks-table__row_white {
+                td, th {
+                    background: #BBED21;
+                }
             }
 
             &_white td {
@@ -455,6 +448,11 @@ export default {
                         left: -1px;
                         top: -1px;
                     }
+                }
+
+                .tasks-table__select {
+                    padding-top: 10px;
+                    height: 25px;
                 }
             }
         }

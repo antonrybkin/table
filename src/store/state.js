@@ -12,6 +12,7 @@ export default {
       redMark: false,
       resource: null,
       removed: false,
+      newParent: false,
       children: [
         {
           id: 2,
@@ -24,6 +25,7 @@ export default {
           redMark: false,
           resource: null,
           removed: false,
+          newParent: false,
           children: [
             {
               id: 3,
@@ -36,6 +38,7 @@ export default {
               redMark: true,
               resource: "Разработчик 1",
               removed: false,
+              newParent: false,
               children: []
             },
             {
@@ -49,6 +52,7 @@ export default {
               redMark: true,
               resource: "Разработчик 2",
               removed: false,
+              newParent: false,
               children: []
             }
           ]
@@ -64,6 +68,7 @@ export default {
           redMark: false,
           resource: null,
           removed: false,
+          newParent: false,
           children: [
             {
               id: 32,
@@ -76,6 +81,7 @@ export default {
               redMark: false,
               resource: null,
               removed: false,
+              newParent: false,
               children: [
                 {
                   id: 33,
@@ -88,6 +94,7 @@ export default {
                   redMark: true,
                   resource: "Антон",
                   removed: false,
+                  newParent: false,
                   children: []
                 },
                 {
@@ -101,6 +108,7 @@ export default {
                   redMark: false,
                   resource: "Разработчик 2",
                   removed: false,
+                  newParent: false,
                   children: []
                 },
                 {
@@ -114,6 +122,7 @@ export default {
                   redMark: false,
                   resource: "Разработчик 1",
                   removed: false,
+                  newParent: false,
                   children: []
                 }
               ]
@@ -131,6 +140,7 @@ export default {
           redMark: false,
           resource: null,
           removed: false,
+          newParent: false,
           children: [
             {
               id: 63,
@@ -143,6 +153,7 @@ export default {
               redMark: false,
               resource: "Разработчик 1",
               removed: false,
+              newParent: false,
               children: []
             }
           ]
@@ -158,6 +169,7 @@ export default {
           redMark: false,
           resource: null,
           removed: false,
+          newParent: false,
           children: [
             {
               id: 100,
@@ -170,6 +182,7 @@ export default {
               redMark: false,
               resource: "Разработчик 1",
               removed: false,
+              newParent: false,
               children: []
             },
             {
@@ -183,6 +196,7 @@ export default {
               redMark: false,
               resource: "Разработчик 1",
               removed: false,
+              newParent: false,
               children: []
             }
           ]
