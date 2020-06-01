@@ -57,7 +57,8 @@
                        @keyup.enter="saveOrder(task.id)"
                        class="tasks-table__order-input">
         </td>
-        <td class="tasks-table__order">
+        <td v-if="task.children && task.children.length > 0"><div class="tasks-table__padding-cell">{{ task.hours }} ч</div></td>
+        <td v-else class="tasks-table__order">
             <label v-show="!editHours"
                    @click="changeHours"
                    class="tasks-table__order-label">{{ task.hours }} ч</label>
@@ -139,6 +140,7 @@ export default {
     methods: {
         ...mapActions(['setFlag', 'setResource', 'setStart', 'setEnd', 'setName', 'setOrder', 'setHours']),
 
+        // Рекактирование названия задачи
         changeName() {
             this.inputName = this.task.name;
             this.editName = true;
@@ -147,6 +149,7 @@ export default {
             })
         },
 
+        // Сохранение названия задачи
         saveName(id) {
             this.editName = false;
             this.setName({ id, value: this.inputName });
@@ -172,7 +175,7 @@ export default {
                 return this;
             }
             end.addHours(difference)
-            if (difference > 7) this.setEnd({ id, value: end })
+            if (difference > 7 || difference < -7) this.setEnd({ id, value: end })
             this.setHours({ id, value: this.inputHoursValue })
         },
 
