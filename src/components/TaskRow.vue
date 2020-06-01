@@ -204,6 +204,7 @@ export default {
         updateStart(value) {
             const id = this.task.id;
             this.setStart({ id, value })
+            this.setHours({ id, value: this.duration * 8 })
         },
 
         updateEnd(value) {
