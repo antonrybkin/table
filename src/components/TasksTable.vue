@@ -197,12 +197,12 @@ export default {
             this.$store.commit('unMarkNewParent'); // Убираем выделение нового родителя
             const childrenIds = this.drag.item.children.length > 0 ? this.drag.item.children.map(task => task.id) : null;
             // Запрещаем перемещать задачу в саму себя и в свои дочерние задачи следующей проверкой:
-            if((this.drag.newParent.id !== this.drag.item.id.toString())
-                && (childrenIds === null || !(childrenIds.includes(Number(this.drag.newParent.id))))) {
+            const id = Number(this.drag.newParent.id);
+            if((id !== this.drag.item.id) && (childrenIds === null || !(childrenIds.includes(id)))) {
                 let item = this.drag.item; // Добавляем перемещаемую задачу в пустой массив
 
                 // Запускаем действие (action) смены категории (id) для объекта item
-                this.dropRow({ id: this.drag.newParent.id, item });
+                this.dropRow({ id, item });
 
                 // Ищем и открываем родителя
                 this.flat.forEach(task => {
