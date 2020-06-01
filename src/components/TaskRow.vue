@@ -209,6 +209,7 @@ export default {
         updateEnd(value) {
             const id = this.task.id;
             this.setEnd({ id, value })
+            this.setHours({ id, value: this.duration * 8 })
         }
     }
 }
