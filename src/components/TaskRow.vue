@@ -116,14 +116,6 @@ export default {
                 }
                 recursivelyCheck(this.task, newValue)
             }
-        },
-        hours: {
-            get: function () {
-                return this.task.checked
-            },
-            set: function (newValue) {
-                //
-            }
         }
     },
     data() {
@@ -169,8 +161,8 @@ export default {
             this.editHours = false;
             const start = new Date(this.task.start);
             Date.prototype.addHours = function(h) {
-                // Прибавляем 8-часовой рабочий день (поэтому х3)
-                this.setTime(this.getTime() + (h*60*60*1000*3));
+                const day = (Math.trunc((h-1)/8))*24*60*60*1000;
+                this.setTime(this.getTime() + day);
                 return this;
             }
             const end = start.addHours(this.inputHoursValue);
