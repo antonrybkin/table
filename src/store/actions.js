@@ -11,6 +11,11 @@ export default {
         context.commit(`SET_NAME`, { id, value })
     },
 
+    setHours(context, { id, value }) {
+        // ЗДЕСЬ БУДЕТ ЗАПРОС НА ИЗМЕНЕНИЕ ТРУДОЗАТРАТ
+        context.commit(`SET_HOURS`, { id, value })
+    },
+
     setOrder(context, { id, value }) {
         // ЗДЕСЬ БУДЕТ ЗАПРОС НА УСТАНОВКУ ПРЕДШЕТСТВЕННИКА
         context.commit(`SET_ORDER`, { id, value })

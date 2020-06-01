@@ -57,7 +57,19 @@
                        @keyup.enter="saveOrder(task.id)"
                        class="tasks-table__order-input">
         </td>
-        <td><div class="tasks-table__padding-cell">{{ task.hours }} ч</div></td>
+        <td class="tasks-table__order">
+            <label v-show="!editHours"
+                   @click="changeHours"
+                   class="tasks-table__order-label">{{ task.hours }} ч</label>
+            <input v-show="editHours"
+                   ref="inputHours"
+                   type="number"
+                   v-model="inputHoursValue"
+                   v-on:blur="saveHours(task.id)"
+                   @keypress="onlyNumber"
+                   @keyup.enter="saveHours(task.id)"
+                   class="tasks-table__order-input">
+        </td>
         <td class="tasks-table__cell-wrapper">
             <div class="tasks-table__select">
                 <v-select v-if="!task.children || task.children.length < 1"
@@ -103,6 +115,14 @@ export default {
                 }
                 recursivelyCheck(this.task, newValue)
             }
+        },
+        hours: {
+            get: function () {
+                return this.task.checked
+            },
+            set: function (newValue) {
+                //
+            }
         }
     },
     data() {
@@ -110,12 +130,14 @@ export default {
             checked: this.task.checked,
             editName: false,
             editOrder: false,
+            editHours: false,
             inputName: "",
-            inputOrderValue: 0
+            inputOrderValue: 0,
+            inputHoursValue: 0
         }
     },
     methods: {
-        ...mapActions(['setFlag', 'setResource', 'setStart', 'setEnd', 'setName', 'setOrder']),
+        ...mapActions(['setFlag', 'setResource', 'setStart', 'setEnd', 'setName', 'setOrder', 'setHours']),
 
         changeName() {
             this.inputName = this.task.name;
@@ -128,6 +150,30 @@ export default {
         saveName(id) {
             this.editName = false;
             this.setName({ id, value: this.inputName });
+        },
+
+        // Рекактирование трудозатрат
+        changeHours() {
+            this.inputHoursValue = this.task.hours;
+            this.editHours = true;
+            this.$nextTick(() => {
+                this.$refs.inputHours.focus();
+            })
+        },
+
+        // Сохранение трудозатрат
+        saveHours(id) {
+            this.editHours = false;
+            const difference = (this.task.hours % 8) + (this.inputHoursValue - this.task.hours);
+            const end = new Date(this.task.end);
+            Date.prototype.addHours = function(h) {
+                // Прибавляем 8-часовой рабочий день (поэтому х3)
+                this.setTime(this.getTime() + (h*60*60*1000*3));
+                return this;
+            }
+            end.addHours(difference)
+            if (difference > 7) this.setEnd({ id, value: end })
+            this.setHours({ id, value: this.inputHoursValue })
         },
 
         // Рекактирование Предшественника

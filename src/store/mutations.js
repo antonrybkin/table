@@ -48,6 +48,10 @@ export default {
     findById(state.tasks, id).name = value
   },
 
+  SET_HOURS(state, { id, value }) {
+    findById(state.tasks, id).hours = value
+  },
+
   SET_ORDER(state, { id, value }) {
     findById(state.tasks, id).order = value
   },
