@@ -332,7 +332,7 @@ export default {
         }
 
         &__select {
-            padding: 0;
+            padding-top: 5px;
 
             .v-select {
                 .vs__selected-options {
