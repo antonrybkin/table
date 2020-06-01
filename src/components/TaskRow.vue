@@ -167,15 +167,14 @@ export default {
         // Сохранение трудозатрат
         saveHours(id) {
             this.editHours = false;
-            const difference = (this.task.hours % 8) + (this.inputHoursValue - this.task.hours);
-            const end = new Date(this.task.end);
+            const start = new Date(this.task.start);
             Date.prototype.addHours = function(h) {
                 // Прибавляем 8-часовой рабочий день (поэтому х3)
                 this.setTime(this.getTime() + (h*60*60*1000*3));
                 return this;
             }
-            end.addHours(difference)
-            if (difference > 7 || difference < -7) this.setEnd({ id, value: end })
+            const end = start.addHours(this.inputHoursValue);
+            this.setEnd({ id, value: end })
             this.setHours({ id, value: this.inputHoursValue })
         },
 
