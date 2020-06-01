@@ -26,7 +26,7 @@
                        tag="tbody"
                        ghost-class="tasks-table__row_ghost"
                        :move="moveRow"
-                       @change="dragRow"
+                       @end="dragRow"
                        handle=".tasks-table__id">
                 <template v-for="task in filterTasks">
                     <TaskRow :key="task.id"
@@ -187,7 +187,7 @@ export default {
                     this.$store.commit('markNewParent', newParent.id); // Добавляем выделение НОВОГО родителя
                 }
 
-                // В этом блоке кода находим перенаскиваемый элемент
+                // В этом блоке кода находим перетаскиваемый элемент
                 this.drag.item = this.flat.find(task => task.id.toString() === value.dragged.cells[0].textContent);
             }
         },
@@ -199,11 +199,9 @@ export default {
             // Запрещаем перемещать задачу в саму себя и в свои дочерние задачи следующей проверкой:
             if((this.drag.newParent.id !== this.drag.item.id.toString())
                 && (childrenIds === null || !(childrenIds.includes(Number(this.drag.newParent.id))))) {
-                // this.modal.show = true; // Показываем окно-подтверждение
-                // this.modal.show = false; // Скрываем окно-подтверждение
                 let item = this.drag.item; // Добавляем перемещаемую задачу в пустой массив
 
-                // Запускаем действие (action) смены категории (id) для массива items
+                // Запускаем действие (action) смены категории (id) для объекта item
                 this.dropRow({ id: this.drag.newParent.id, item });
 
                 // Ищем и открываем родителя
