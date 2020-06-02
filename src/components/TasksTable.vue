@@ -57,9 +57,9 @@
                                                      @expand="expand" />
                                             <template v-if="taskLavel4.id in expanded && expanded[taskLavel4.id]">
                                                 <template v-for="(taskLavel5, index5) in taskLavel4.children">
-                                                    <TaskRow :key="`key3${index5}-${taskLavel5.id}`"
+                                                    <TaskRow :key="`key4${index5}-${taskLavel5.id}`"
                                                              :task="taskLavel5"
-                                                             class="tasks-table__row_lavel4"
+                                                             class="tasks-table__row_lavel5"
                                                              :class="{ 'isOpen' : expanded[taskLavel5.id] }"
                                                              @expand="expand" />
                                                 </template>
