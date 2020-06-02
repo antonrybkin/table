@@ -22,7 +22,7 @@ export default {
           start: "2020-04-23T18:25:43.511Z",
           end: "2020-04-30T18:25:43.511Z",
           order: 1,
-          redMark: false,
+          redMark: true,
           resource: null,
           removed: false,
           newParent: false,

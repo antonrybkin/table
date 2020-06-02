@@ -2,7 +2,8 @@
     <tr class="tasks-table__row"
         :class="{
             'tasks-table__row_white' : task.children.length < 1,
-            'tasks-table__row_red' : task.redMark,
+            'tasks-table__row_red' : task.redMark && !task.children.length,
+            'tasks-table__row_red-parent' : task.redMark && task.children.length,
             'tasks-table__row_dropped' : task.dropped,
             'tasks-table__row_new-parent' : task.newParent
     }">

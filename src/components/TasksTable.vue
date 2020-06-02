@@ -407,6 +407,20 @@ export default {
                 font-weight: lighter;
             }
 
+            &_red-parent th:first-child {
+                position: relative;
+
+                &:before {
+                    content: '';
+                    position: absolute;
+                    left: -2px;
+                    top: 0;
+                    width: 1px;
+                    height: 35px;
+                    background: #F84932;
+                }
+            }
+
             &_red {
                 .tasks-table__id-wrapper {
                     position: relative;
