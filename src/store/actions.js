@@ -24,11 +24,13 @@ export default {
     setStart(context, { id, value }) {
         // ЗДЕСЬ БУДЕТ ЗАПРОС НА УСТАНОВКУ ДАТЫ СТАРТА ЗАДАЧИ
         context.commit(`SET_START`, { id, value })
+        context.commit(`UPDATE_MARKS`)
     },
 
     setEnd(context, { id, value }) {
         // ЗДЕСЬ БУДЕТ ЗАПРОС НА УСТАНОВКУ ДЕДЛАЙНА К ЗАДАЧЕ
         context.commit(`SET_END`, { id, value })
+        context.commit(`UPDATE_MARKS`)
     },
 
     setResource(context, { id, value }) {

@@ -149,13 +149,15 @@ export default {
                     const sameResource = lastLavel.filter(task => reource.includes(task.resource))
                     sameResource.forEach(task => {
                         sameResource.forEach(t => {
-                            const start = new Date(task.start).getTime();
-                            const end = new Date(task.end).getTime();
-                            const start2 = new Date(t.start).getTime();
-                            const end2 = new Date(t.end).getTime();
-                            task.redMark = (start <= end2 && start2 <= end) ||
-                                            (start <= end2 && end2 <= end) ||
-                                            (start2 < start && end2 < end2)
+                            if(task.id !== t.id && task.redMark === false) {
+                                const start = new Date(task.start).getTime();
+                                const end = new Date(task.end).getTime();
+                                const start2 = new Date(t.start).getTime();
+                                const end2 = new Date(t.end).getTime();
+                                task.redMark = ((start <= start2 && start2 <= end) ||
+                                    (start <= end2 && end2 <= end) ||
+                                    (start2 < start && end < end2))
+                            }
                         })
                     })
                 })
