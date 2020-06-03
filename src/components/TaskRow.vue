@@ -141,9 +141,7 @@ export default {
         changeName() {
             this.inputName = this.task.name;
             this.editName = true;
-            this.$nextTick(() => {
-                this.$refs.inputName.focus();
-            })
+            this.$nextTick(() => this.$refs.inputName.focus())
         },
 
         // Сохранение названия задачи
@@ -156,9 +154,7 @@ export default {
         changeHours() {
             this.inputHoursValue = this.task.hours;
             this.editHours = true;
-            this.$nextTick(() => {
-                this.$refs.inputHours.focus();
-            })
+            this.$nextTick(() => this.$refs.inputHours.focus())
         },
 
         // Сохранение трудозатрат
@@ -179,9 +175,7 @@ export default {
         changeOrder() {
             this.inputOrderValue = this.task.order;
             this.editOrder = true;
-            this.$nextTick(() => {
-                this.$refs.inputOrder.focus();
-            })
+            this.$nextTick(() => this.$refs.inputOrder.focus())
         },
 
         // Сохранение Предшественника
@@ -200,6 +194,7 @@ export default {
 
         putResourse(id, value) {
             this.setResource({ id, value })
+            this.$emit(`updateResource`, id)
         },
 
         changeFlag() {

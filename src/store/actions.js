@@ -34,6 +34,7 @@ export default {
     setResource(context, { id, value }) {
         // ЗДЕСЬ БУДЕТ ЗАПРОС НА ПРИСОЕДИНЕНИЕ РЕСУРСА К ЗАДАЧЕ
         context.commit(`SET_RESOURCE`, { id, value })
+        context.commit(`UPDATE_MARKS`)
     },
 
     setFlag(context, { id, value }) {

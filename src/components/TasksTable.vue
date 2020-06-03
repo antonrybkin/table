@@ -33,6 +33,7 @@
                              :task="task"
                              class="tasks-table__row_lavel1"
                              :class="{ 'isOpen' : expanded[task.id] }"
+                             @updateResource="updateResource"
                              @expand="expand" />
                     <template v-if="task.id in expanded && expanded[task.id]">
                         <template v-for="(taskLavel2, index1) in task.children">
@@ -40,6 +41,7 @@
                                      :task="taskLavel2"
                                      class="tasks-table__row_lavel2"
                                      :class="{ 'isOpen' : expanded[taskLavel2.id] }"
+                                     @updateResource="updateResource"
                                      @expand="expand" />
                             <template v-if="taskLavel2.id in expanded && expanded[taskLavel2.id]">
                                 <template v-for="(taskLavel3, index2) in taskLavel2.children">
@@ -47,6 +49,7 @@
                                              :task="taskLavel3"
                                              class="tasks-table__row_lavel3"
                                              :class="{ 'isOpen' : expanded[taskLavel3.id] }"
+                                             @updateResource="updateResource"
                                              @expand="expand" />
                                     <template v-if="taskLavel3.id in expanded && expanded[taskLavel3.id]">
                                         <template v-for="(taskLavel4, index3) in taskLavel3.children">
@@ -54,6 +57,7 @@
                                                      :task="taskLavel4"
                                                      class="tasks-table__row_lavel4"
                                                      :class="{ 'isOpen' : expanded[taskLavel4.id] }"
+                                                     @updateResource="updateResource"
                                                      @expand="expand" />
                                             <template v-if="taskLavel4.id in expanded && expanded[taskLavel4.id]">
                                                 <template v-for="(taskLavel5, index5) in taskLavel4.children">
@@ -61,6 +65,7 @@
                                                              :task="taskLavel5"
                                                              class="tasks-table__row_lavel5"
                                                              :class="{ 'isOpen' : expanded[taskLavel5.id] }"
+                                                             @updateResource="updateResource"
                                                              @expand="expand" />
                                                 </template>
                                             </template>
@@ -121,7 +126,41 @@ export default {
 
         flat: {
             get() {
-                return deepLoop(this.filterTasks)
+                const flat = deepLoop(this.filterTasks); // Конвертируем список задач в одноуровневый массив
+                const lastLavel = flat.filter(task => !task.children.length); // Только задачи без подзадач
+
+                // Получаем список ресурсов с колличеством задач
+                const lookup = lastLavel.reduce((a, e) => {
+                    a[e.resource] = ++a[e.resource] || 0;
+                    return a;
+                }, {});
+
+                // Получаем ресурсы с несколькими задачами
+                let resWithMoreTasks = [];
+                for(const resource in lookup) {
+                    if(resource !== "null" && parseInt(lookup[resource]) > 0) {
+                        resWithMoreTasks.push(resource);
+                    }
+                }
+
+                // Проверяем есть ли пересечение интервалов дат в задачах для каждого ресурса,
+                // и если есть, то ставим redMark
+                resWithMoreTasks.forEach(reource => {
+                    const sameResource = lastLavel.filter(task => reource.includes(task.resource))
+                    sameResource.forEach(task => {
+                        sameResource.forEach(t => {
+                            const start = new Date(task.start).getTime();
+                            const end = new Date(task.end).getTime();
+                            const start2 = new Date(t.start).getTime();
+                            const end2 = new Date(t.end).getTime();
+                            task.redMark = (start <= end2 && start2 <= end) ||
+                                            (start <= end2 && end2 <= end) ||
+                                            (start2 < start && end2 < end2)
+                        })
+                    })
+                })
+
+                return flat // Возвращаем массив, полученный в самом начале, а все предыдущие манипуляции нужны для проставления redMark
             },
             set(value) {
                 // console.log(value);
@@ -166,6 +205,18 @@ export default {
         expand(id) {
             const bul =  this.expanded[id] ? 0 : 1;
             this.$set(this.expanded, id, bul);
+        },
+
+        updateResource(id) {
+            this.flat.forEach(task => {
+                if(task.children.length > 0) {
+                    const parent = task.children.find(t => t.id === id)
+                    if(parent !== undefined) {
+                        this.expand(task.id)
+                        this.$nextTick(() => this.expand(task.id))
+                    }
+                }
+            })
         },
 
         // Следим за перемещеием строк

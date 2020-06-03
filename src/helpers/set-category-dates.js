@@ -17,7 +17,7 @@ export default function setCategoryDates(tasks) {
                 task.end = Math.max(...allEndDates);
                 task.hours = subHours.reduce((a, b) => a + b, 0)
             } else if(task.children.length < 1) {
-                task.hours = parseInt(task.hours) || (task.duration * 8)
+                task.hours = parseInt(task.hours) || (task.duration * 8);
             }
             task.duration = dateDiffInDays(new Date(task.start), new Date(task.end));
             task.dropped = task.dropped || false;
