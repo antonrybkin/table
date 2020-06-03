@@ -127,6 +127,9 @@ export default {
         flat: {
             get() {
                 const flat = deepLoop(this.filterTasks); // Конвертируем список задач в одноуровневый массив
+
+                this.$store.commit('updateRedMarkers'); // Убираем все redMark
+
                 const lastLavel = flat.filter(task => !task.children.length); // Только задачи без подзадач
 
                 // Получаем список ресурсов с колличеством задач
@@ -149,14 +152,15 @@ export default {
                     const sameResource = lastLavel.filter(task => reource.includes(task.resource))
                     sameResource.forEach(task => {
                         sameResource.forEach(t => {
+                            // Условие: это не та же самая задача и она ещё не была маркирована в текущей проверке
                             if(task.id !== t.id && task.redMark === false) {
                                 const start = new Date(task.start).getTime();
                                 const end = new Date(task.end).getTime();
                                 const start2 = new Date(t.start).getTime();
                                 const end2 = new Date(t.end).getTime();
-                                task.redMark = ((start <= start2 && start2 <= end) ||
-                                    (start <= end2 && end2 <= end) ||
-                                    (start2 < start && end < end2))
+                                task.redMark = ((start <= start2 && start2 <= end) || // task начинается в t
+                                    (start <= end2 && end2 <= end) || // task заканчивается в t
+                                    (start2 < start && end < end2)) // task внутри t
                             }
                         })
                     })

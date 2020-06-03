@@ -148,16 +148,16 @@ export default {
       }
   },
 
-  UPDATE_MARKS(state) {
-    deepLoop(state.tasks).forEach(task => task.redMark = false);
-  },
-
   markNewParent(state, id) {
     findById(state.tasks, id).newParent = true
   },
 
   unMarkNewParent(state) {
     deepLoop(state.tasks).forEach(task => task.newParent = false);
+  },
+
+  updateRedMarkers(state) {
+    deepLoop(state.tasks).forEach(task => task.redMark = false);
   },
 
   clearCheckboxes(state) {
