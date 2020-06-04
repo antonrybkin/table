@@ -233,9 +233,7 @@ export default {
             this.parentNode = value.originalEvent === undefined ? this.parentNode : value.originalEvent.target.parentNode
             if(this.parentNode !== null && this.parentNode !== '' && this.parentNode.firstChild !== null) {
                 // ID задачи, в которую дропаем, вычисляется 2мя путями: при перемещении в верх и вниз, иначе получится не корректно
-                const parentId = (index > futureIndex) && (this.parentNode.previousElementSibling !== null) ?
-                    this.parentNode.previousElementSibling.firstChild.textContent :
-                    this.parentNode.firstChild.textContent;
+                const parentId = this.parentNode.firstChild.textContent;
                 const newParent = this.flat.find(task => task.id === parseInt(parentId));
                 //this.expand(this.drag.newParent.id);
                 if(newParent !== undefined) {
