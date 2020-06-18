@@ -80,8 +80,6 @@
         </table>
         <div v-if="filterTasks.length < 1" class="tasks-table__no-results">Нет задач.</div>
         <TaskActions v-if="toActionArray.length" :items="toActionArray" />
-        <div>URL: {{ url }}</div>
-        <div>TITLE: {{ title }}</div>
     </div>
 </template>
 
