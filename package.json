@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build-prod": "vue-cli-service build",
-    "postinstall": "npm run build",
+    "postinstall": "",
     "start": "node server.js",
     "lint": "vue-cli-service lint"
   },
